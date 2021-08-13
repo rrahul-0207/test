@@ -1,0 +1,48 @@
+<tr data-ad-id="<?php echo $wo['ad']['id']; ?>">
+	<td>
+	<span>
+		<?php echo $wo['ad']['id']; ?>
+	</span>
+	</td>
+	<td width="300">
+		<span><?php echo $wo['ad']['name']; ?></span>
+	</td>
+	<td>
+		<span><?php echo $wo['lang'][$wo['ad']['bidding']]; ?></span>
+	</td>
+	<td>
+		<span><?php echo $wo['ad']['clicks']; ?></span>
+	</td>
+	<td>
+		<span><?php echo $wo['ad']['views']; ?></span>
+	</td>
+	<td data-ad-status="<?php echo $wo['ad']['id']; ?>" width="150">
+		<span>
+			<?php if ($wo['ad']['status'] == 1): ?>
+				<?php echo $wo['lang']['active']; ?>
+			<?php else: ?>
+				<?php echo $wo['lang']['not_active']; ?>
+			<?php endif; ?>
+		</span>
+	</td>
+	<td>
+		<a href="<?php echo $wo['ad']['edit-url']; ?>">
+			<span>
+				<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+			</span>
+		</a>
+		&nbsp;
+		<span class="pointer delete-ad" id="<?php echo $wo['ad']['id']; ?>">
+			<i class="fa fa-trash-o" aria-hidden="true"></i>
+		</span>
+		&nbsp;
+		<span class="toggle-user-ad-status pointer" id="<?php echo $wo['ad']['id']; ?>" title="<?php echo $wo['lang']['status']; ?>" data-status="<?php echo $wo['ad']['status']; ?>">
+		<?php if ($wo['ad']['status'] == 1): ?>
+			<i class="fa fa-times-circle-o"></i>
+		<?php else: ?>
+			<i class="fa fa-check-circle-o"></i>
+		<?php endif;?>
+			
+		</span>
+	</td>
+</tr>

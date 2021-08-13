@@ -1,0 +1,64 @@
+<div class="list-group">
+   <div class="list-group-item"><i class="fa fa-fw fa-book"></i> Stories / Status</div>
+   <div class="setting-well">
+      <div class="clear"></div>
+      <table class="table  table-hover table-bordered table-stripped setting-table">
+         <thead>
+            <tr>
+               <th><?php echo $wo['lang']['id'];?></th>
+               <th>Expires</th>
+               <th>User</th>
+               <th><?php echo $wo['lang']['time'];?></th>
+               <th><?php echo $wo['lang']['action'];?></th>
+            </tr>
+         </thead>
+         <tbody class="page-result manage-pages-list" id="manage-user-stories">
+               <?php 
+               $wo_stories = Wo_GetAllStories();
+
+               if ($wo_stories && count($wo_stories) > 0) {
+                  foreach ($wo_stories as $wo['status']) {
+                     echo Wo_LoadPage('admin/status/status-list');
+                  }
+               }
+               ?>
+         </tbody>
+      </table>
+      <span class="center-text"></span>
+   </div>
+</div>
+
+<script>
+$(function () {
+  $('table').DataTable({"aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 4 ] }
+    ],
+   "order": [[ 0, "desc" ]]});
+});
+   jQuery(document).ready(function($) {
+      $(".load-more-stories").click(function(event) {
+         var last_id = ($("tr[data-status-id]").length > 0) ? $("tr[data-status-id]").last().attr('data-status-id') : 0;
+         var self    = $(this);
+         $.ajax({
+           url: Wo_Ajax_Requests_File(),
+           type: 'GET',
+           dataType: 'json',
+           data: {f: 'status',s:'lm',offset:last_id},
+         })
+         .done(function(data) {
+           if (data.status == 200) {
+             $("#manage-user-stories").append(data.html);
+           }
+           else if(data.status == 404){
+             self.removeClass('load-more-ads').html(data.html);
+           }
+           else{
+             self.remove();
+           }
+         })
+         .fail(function() {
+           console.log("error");
+         })   
+      });
+   });
+</script>

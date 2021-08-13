@@ -1,0 +1,209 @@
+<div class="page-margin">
+   <div class="row">
+      <div class="col-md-2"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+      <div class="col-md-7 profile-lists">
+         <div class="list-group">
+            <div class="list-group-item"><i class="fa fa-fw fa-flag"></i> My Feedback</div>
+            <div class="clear"></div>
+            <div class="setting-well" style="padding-top:25px;padding-bottom:25px;">
+                <ul class="nav nav-tabs tab">
+                  <li class="active"><a data-toggle="tab" href="#users"><i class="fa fa-user"></i>My Feedback</a></li>
+                 <li id="page"><a data-toggle="tab" href="#pages"><i class="fa fa-flag"></i> Sent</a></li>
+                  <li><a data-toggle="tab" href="#groups"><i class="fa fa-users"></i>Received </a></li>
+        
+               </ul>
+               <div class="tab-content">
+                  <div id="users" class="tab-pane fade in active">
+                  <div id="users-cont" style="margin-top:45px;margin-bottom:20px;">
+                <form  method="post" class="form-horizontal setting-feedback-form">
+                    <div class="setting-profile-alert setting-update-alert"></div>
+                     <fieldset>
+                          <div class="form-group">
+            <label class="col-md-2" for="first_name">Phone Number</label>  
+            <div class="col-md-7">
+               <input id="ph_number" name="ph_number" type="text" onblur="myFunction()" class="form-control input-pnum"/>
+            </div>
+         </div>
+         
+          <!-- Textarea -->
+         <div class="form-group">
+            <label class="col-md-2" for="feedback">Message</label>
+            <div class="col-md-7">
+            
+               <textarea class="form-control" id="feedback_msg" name="feedback_msg" cols="20" rows="3"></textarea>
+            </div>
+         </div>
+         <!-- Text input-->
+           <!-- Textarea -->
+         <div class="form-group">
+            <label class="col-md-2" for="feedback">Choose Message type</label>
+            <div class="col-md-9">
+            <div class="col-md-6">
+                <input id="p_number" name="p_number" type="radio" class="form-control input-pnum " value="Annoymously" style="width: 20px !important;
+    float: left;"/><label class="col-md-6" for="feedback" style="
+    padding: 0;">Secretly</label>
+                </div>
+                 <div class="col-md-6">
+                <input id="p_number" name="p_number" type="radio" class="form-control input-pnum " value="Username" style="width: 20px !important;
+    float: left;"/><label class="col-md-6" for="feedback" style="
+    padding: 0;">Username</label>
+                </div>
+            </div>
+         </div>
+         
+         <!-- Text input-->
+          <div class="form-group last-btn">
+            <label class="col-md-2"></label>  
+            <div class="col-sm-3">
+               <button type="submit" class="btn btn-main">
+               <i class="fa fa-floppy-o progress-icon" data-icon="floppy-o"></i> <?php echo $wo['lang']['send']; ?>
+               </button>
+            </div>
+         </div>
+               </fieldset>
+   </form>
+   </div>
+   </div>
+   
+<div id="pages" class="tab-pane fade">
+                    <div id="pages-cont">
+                        <?php   $user_id=$wo['user']['user_id'];
+                         $phone=Wo_FeedbackPhone($user_id);
+                          $from_userid=Wo_FromUserId($phone);
+                           $result=Wo_Tophno($from_userid);
+                         foreach($result as $val)  {
+                              $type=$val['type'];
+                         $user=$value['from_user_id'];
+                         $number=$val['to_pno'];
+                             $username= Wo_Feedbacknumber($number);
+                       
+
+                        ?>
+                        <div class="name" style="font-weight:bold;"><?php if(!empty($username)){ echo $username; } else { echo $number; }?>&nbsp;:&nbsp;<span class="pages" ><?php echo $val['message']; ?></span></div>
+                        <?php } ?>
+                        </div>
+                        </div>
+                         <div id="groups" class="tab-pane fade">
+                    <div id="groups-cont">
+                        
+                        <?php   $user_id=$wo['user']['user_id'];
+                        
+                          $phone=Wo_FeedbackPhone($user_id);
+                        
+                          $tomsg= Wo_Fromphno($phone);
+                         foreach($tomsg as $value)  {
+                              $user=$value['from_user_id'];
+                               $type=$value['type'];
+                             $username= Wo_FeedbackName($user);
+                        
+                      ?> 
+                      
+                      <div class="name" style="font-weight:bold;
+    padding-bottom: 19px;"><?php  if ($type=="Username") {echo $username;} else { echo "9999999999";}  ?>&nbsp;:&nbsp;<span class="groups"><?php echo $value['message']; ?></span></div>
+                        <?php } ?>
+                       
+                        
+    </div>
+                        </div>
+   
+   </div>
+   
+   
+   
+            </div>
+         </div>
+      </div>
+      <?php echo Wo_LoadPage('sidebar/content');?>
+   </div>
+</div>
+
+
+<script type="text/javascript">
+function myFunction() {
+    var ph_number =$("#ph_number").val();
+    
+     // alert(phone);
+     $.ajax({
+       url: Wo_Ajax_Requests_File() + '?f=feedback_user',
+        type: 'POST',
+         data: {ph_number:ph_number},
+        success:function(data){
+           
+         data = jQuery.parseJSON(data);
+         if(data.res == '1') {
+             
+         }
+         else {
+            $('.setting-profile-alert').html('<div class="alert alert-danger">' + data.res + '</div>');
+             $('.alert-danger').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+            
+        }
+           
+      
+        
+        }
+      })   
+ 
+   
+}   
+$( 'ul.tab a' ).bind( 'click', function(e){
+      
+       $('html, body').animate({
+        scrollTop: $( $.attr(this, 'href') ).offset().top
+    }, 500);
+      e.preventDefault();
+});  
+  $(document).ready(function() {
+ 
+       $('html, body').animate({
+        scrollTop: $( $.attr(this, 'href') ).offset().top
+    }, 500);
+      e.preventDefault();
+  
+}); 
+$('.btn-main').click(function () {
+    var type=$("#p_number").val();
+    
+  $('form.setting-feedback-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=feedback',
+    beforeSend: function() {
+      Wo_progressIconLoader($('form.setting-profile-form').find('button'));
+    },
+    success: function(data) {
+       //alert(data);
+       data = jQuery.parseJSON(data);
+      
+      if (data.status == 200) {
+        
+        scrollToTop();
+        if(data.res == '1') {
+            //alert(data.res);
+        $('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+        }
+        else {
+            alert("Already mitrah User. Please send message manually.");
+            $('.setting-profile-alert').html('<div class="alert alert-danger">' + data.res + '</div>');
+        $('.alert-danger').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+            
+        }
+      } 
+      window.location.reload();
+     // Wo_progressIconLoader($('form.setting-feedback-form').find('button'));
+    }
+  });
+ 
+});
+</script>

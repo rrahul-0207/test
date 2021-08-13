@@ -1,0 +1,6 @@
+Change-log:
+
+Added custom currency for the ads system.
+Added web push notifications.
+Added custom CSS / JS code to admin panel
+Fixed 10+ reported bugs.

@@ -1,0 +1,116 @@
+<div class="list-group">
+   <div class="list-group-item"><i class="fa fa-user-plus" aria-hidden="true"></i> Invitations</div>
+   <div class="setting-well">
+      <div class="clear"></div>
+      <table class="table  table-bordered table-condensed setting-table">
+         <thead>
+            <tr>
+               <th width="25%">Created</th>
+               <th width="25%">Invitation code</th>
+               <th width="25%">Status</th>
+               <th width="25%"><?php echo $wo['lang']['action'];?></th>
+            </tr>
+         </thead>
+         <tbody class="manage-invitation-list">
+               <?php 
+                  $invitations = Wo_GetAdminInvitation();
+                  if ($invitations && count($invitations) > 0) {
+                     foreach ($invitations as $wo['invitation']) {
+                        echo Wo_LoadPage('admin/invitations/invitation-list');
+                      }
+                  }
+                  else{
+                     echo Wo_LoadPage('admin/invitations/no-invitations');
+                  }
+
+               ?>
+
+   
+
+
+         </tbody>
+         <tfoot>
+            <tr id="new-invitation">
+               <td colspan="4">
+                  <br>
+                  <div class="text-center">
+                     <form id="add-invitation">
+                        <button class="btn btn-main">
+                        <i class="fa fa-plus-square-o progress-icon" data-icon="plus-square-o"></i>
+                        Add new invitation
+                        </button>      
+                     </form>
+                  </div>
+                  <br>
+               </td>
+            </tr>
+         </tfoot>
+      </table>
+      <span class="center-text"></span>
+   </div>
+</div>
+
+<style>
+   .setting-invitation td{
+      border: 1px solid #f4f4f4 !important;
+   }
+
+</style>
+
+<script>
+   jQuery(document).ready(function($) {
+      $('#add-invitation').ajaxForm({
+      url: Wo_Ajax_Requests_File(),
+      type:'GET',
+      dataType:'json',
+      data: {f: 'admincp',s:'insert-invitation'},
+      beforeSend: function() {
+        Wo_progressIconLoader($('#add-invitation').find('button'));
+      },
+      success: function(data) {
+        if (data.status == 200) {
+            if ($('tr.setting-invitation').length > 0) {
+               $('.manage-invitation-list').prepend(data.html);            
+            }
+            else{
+               $('.manage-invitation-list').html(data.html); 
+            }
+          
+        } 
+        Wo_progressIconLoader($('#add-invitation').find('button'));
+      }});
+
+      $(document).on('click', '.delete-admin-invitation', function(event) {
+         var id = $(this).attr('id');
+         $.ajax({
+            url:  Wo_Ajax_Requests_File(),
+            type: 'GET',
+            dataType: 'json',
+            data: {f: 'admincp',s:'rm-invitation',id:id},
+         })
+         .done(function(data) {
+            if (data.status == 200) {
+               $("tr[data-invitation='"+id+"']").slideUp(function() {
+                  $(this).remove();
+               })
+            }
+         })
+         .fail(function() {
+            console.log("error");
+         })
+      });
+
+      $(document).on('click', '.copy-invitation-url', function(event) {
+         event.preventDefault();
+           var $temp = $("<input>");
+           $("body").append($temp);
+           $temp.val($(this).attr('data-link')).select();
+           document.execCommand("copy");
+           $temp.remove();
+           $(this).addClass('main');
+      });
+
+   });
+
+
+</script>

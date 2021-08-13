@@ -1,0 +1,11 @@
+- Added forum system.
+- Added events system.
+- Added "Login with WoWonder" API feature + applications + documentation.
+- Added "load more" button to advanced search page.
+- Added PNG icons to left sidebar.
+- Added "Share to wowonder" button for third party websites + documentation.
+- Added custom chat colors for each conversation.
+- Added push notifications support for Android messenger.
+- Fixed video / audio call bugs.
+- Fixed bugs in the native app API.
+- Fixed few bugs on the script.

@@ -1,0 +1,63 @@
+<div class="list-group">
+   <div class="list-group-item"><i class="fa fa-map" aria-hidden="true"></i> Update sitemap</div>
+   <div class="setting-well">
+      <form id="update-sitemap">
+         <div id="update-sitemap-alert">
+            
+         </div>
+         <br>
+         <div class="form-group">
+            <label class="col-md-2" >Updating*</label>  
+            <div class="col-md-10">
+               <select name="rate" class="form-control">
+                  <option value="" disabled selected>Site map updating rate. Default (daily)</option>
+                  <option value="daily">Daily</option>
+                  <option value="always">Always</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                  <option value="never">Never</option>
+               </select>
+               
+            </div>
+            <div class="clear"></div>
+         </div>
+         <hr>
+         <div class="form-group">
+            <label class="col-md-2" ></label>  
+            <div class="col-md-10">
+               <button type="submit" class="btn btn-main">
+                  <i class="fa fa-cog progress-icon" data-icon="cog"></i>
+   
+                  Generate
+               </button>
+               
+            </div>
+            <div class="clear"></div>
+         </div>
+         <input type="reset" class="hidden">
+      </form>
+      <div class="clear"></div>
+   </div>
+</div>
+
+<script>
+   jQuery(document).ready(function($) {
+      $('#update-sitemap').ajaxForm({
+      url: Wo_Ajax_Requests_File() + "?f=admincp&s=update-sitemap",
+      type:'POST',
+      dataType:'json',
+      beforeSend: function() {
+        Wo_progressIconLoader($('#update-sitemap').find('button'));
+      },
+      success: function(data) {
+        scrollToTop();
+        if (data.status == 200) {
+            $("#update-sitemap-alert").html('<div class="alert alert-success"><i class="fa fa-check" aria-hidden="true"></i>Site map was successfully generated</div>');
+            $('#update-sitemap').find('[type=reset]').trigger('click');
+        } 
+        Wo_progressIconLoader($('#update-sitemap').find('button'));
+      }});
+   });
+</script>

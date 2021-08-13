@@ -1,0 +1,3 @@
+﻿- Fixed few bugs.
+- Added auto-updater system.
+- Added windows server rewrite URL support (web.config).

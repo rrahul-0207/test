@@ -1,0 +1,27 @@
+﻿WoWonder v1.4.1 Update Documentation
+
+Note:
+
+This update is just for who is using 1.4, if you're still using older verisons, please update the script one by one, or contact us.
+
+// ------------------------------------- //
+
+1) How To Update
+
+- Upload and overwrite ALL files/folders (SELECT ALL) file(s) located inside "Update Guide/v1.4.1/Script" folder to your server, if you have renamed your theme, please open "Update Guide/v1.4.1/Script/themes/wowonder/" and upload & overwrite ALL files/folders to your theme folder.
+
+- Refresh your page, Done !
+
+- For more information, please read our FAQ http://docs.wowonder.com/#faq
+
+// ------------------------------------- //
+
+if you're facing any problems, please contact me so i can help.
+
+Created: 11/23/2015
+Last Update: 10/1/2016
+By: Deen Doughouz (DoughouzForest)
+Email: wowondersocial@gmail.com
+Website: http://www.wowonder.com
+
+Copyright © 2016 WoWonder - The Ultimate Social Networking Platform. All rights reserved.

@@ -1,0 +1,8 @@
+Change-log:
+
+Added new powerful admin panel.
+Added push notification system for all site notifications.
+Added the abiltiy to disable wonder/dislike buttons.
+Added new API files, find friends, events, stories create groups pages and events.
+Added support for Opera mini and UC browsers.
+Fixed 15+ reported bugs.

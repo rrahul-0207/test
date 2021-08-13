@@ -1,0 +1,67 @@
+<div class="movies-comment-item" data-movies-comment="<?php echo $wo['comment']['id']; ?>">
+  <div class="col-md-1 col-sm-1 col-xs-1 pull-left movies-comment-item-img hidden-xs">
+    <img src="<?php echo $wo['comment']['user_data']['avatar']; ?>" alt="" class="responsive-img">
+  </div>
+  <div class="col-md-11 col-sm-11 col-xs-11  pull-right movies-comment-item-body">
+    <h5>
+      <a class="pointer" data-ajax="?link1=timeline&u=<?php echo $wo['comment']['user_data']['username']; ?>" href="<?php echo $wo['comment']['user_data']['url']; ?>">
+        <b><?php echo $wo['comment']['user_data']['name']; ?></b>
+      </a>
+       <span class="time">
+        <span class="ajax-time" title="<?php echo date('c',$wo['comment']['posted']); ?>">
+          <?php echo Wo_Time_Elapsed_String($wo['comment']['posted']); ?>
+        </span>
+      </span>
+      <?php if ($wo['comment']['is_owner']): ?>
+  	  	<span class="pointer pull-right del-movies-comment" id="<?php echo $wo['comment']['id']; ?>">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </span>
+	    <?php endif ?>
+    </h5>
+    <p><?php echo $wo['comment']['text']; ?></p>
+    <div>
+      <span class="comment-icons">
+        <span class="pointer reply-tomovie-comm"  id="<?php echo $wo['comment']['id']; ?>">
+          <i class="fa fa-comment progress-icon" data-icon="comment"></i>
+        </span>
+        &nbsp;
+        <span class="pointer add-movies-commlikes-<?php echo $wo['comment']['id']; ?>" onclick="Wo_AddMovieCommentLike(<?php echo $wo['comment']['id']; ?>)">
+        	<i class="fa fa-thumbs-up progress-icon" data-icon="thumbs-up"></i>
+        </span> 
+        <span id="movies-comment-likes" data-movies-comlikes="<?php echo $wo['comment']['id']; ?>">
+        <?php if ($wo['comment']['likes'] > 0): ?>
+          <?php echo $wo['comment']['likes']; ?>
+        <?php endif; ?>
+        </span>
+        &nbsp;
+        <span class="pointer add-movies-commlikes-<?php echo $wo['comment']['id']; ?>" onclick="Wo_AddMovieCommentDisLike(<?php echo $wo['comment']['id']; ?>)">
+          <i class="fa fa-thumbs-down progress-icon" data-icon="thumbs-up"></i>
+        </span> 
+        <span id="movies-comment-likes" data-movies-comdislikes="<?php echo $wo['comment']['id']; ?>">
+        <?php if ($wo['comment']['dislikes'] > 0): ?>
+          <?php echo $wo['comment']['dislikes']; ?>
+        <?php endif; ?>
+        </span>
+      
+      
+      <?php if (count($wo['comment']['replies']) > 5): ?>
+		<span class="pointer"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+      <?php endif; ?>
+    </div>
+  </div>
+  <div class="movies-comment-reply-cont">
+  	<?php 
+  		foreach ($wo['comment']['replies'] as $wo['comm-reply']) {
+  			echo Wo_LoadPage('movies/includes/commreplies-list');
+  		}
+  	?>
+  </div>
+  <div class="movies-comment-reply-box col-md-11 col-sm-11 col-xs-11  pull-right hidden">
+  	<form class="form">
+	    <div class="form-group">
+	      <textarea  class="form-control movies-comment-reply" onkeydown="Wo_RegisterMovieCommReply(<?php echo $wo['comment']['id']; ?>,event,this)"  placeholder="<?php echo $wo['lang']['write_comment'];?>" type="text"></textarea>
+	    </div>
+    </form>
+  </div>
+  
+</div>

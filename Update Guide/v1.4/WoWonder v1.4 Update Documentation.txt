@@ -1,0 +1,33 @@
+﻿WoWonder v1.4 Update Documentation
+
+Note:
+
+This update is just for who is using 1.3.4, if you're still using older verisons, please update the script one by one, or contact us.
+
+// ------------------------------------- //
+
+1) How To Update
+
+- BACKUP, BACKUP, AND BACKUP everything, files, DATABASE.
+
+- Upload "update.php" file located on "Update Guide/v1.4" folder to your server.
+
+- Upload and overwrite ALL files/folders (SELECT ALL) file(s) located inside "Update Guide/v1.4/Script" folder to your server, if you have renamed your theme, please open "Update Guide/v1.4/Script/themes/wowonder/" and upload & overwrite ALL files/folders to your theme folder.
+
+- Open http://www.YOURSITE.COM/update.php
+
+- After finishing the update, make sure you delete the "update.php" file.
+
+- Refresh your page, Done !
+
+// ------------------------------------- //
+
+if you're facing any problems, please contact me so i can help.
+
+Created: 11/23/2015
+Last Update: 9/25/2016
+By: Deen Doughouz (DoughouzForest)
+Email: wowondersocial@gmail.com
+Website: http://www.wowonder.com
+
+Copyright © 2016 WoWonder - The Ultimate Social Networking Platform. All rights reserved.

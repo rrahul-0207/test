@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Manage Features > Pages</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+          <div class="col-lg-3 col-md-3">
+            <div class="info-box bg-pink hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">flag</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL PAGES</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountAllData('page'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-pink hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">thumb_up</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL LIKES</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountPageData('likes'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-pink hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">mode_edit</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL POSTS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountPageData('pages_posts'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-pink hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">check_circle</i>
+                </div>
+                <div class="content">
+                    <div class="text">VERIFIED PAGES</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountPageData('verified_pages'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Pages</h2>
+                </div>
+                <div class="body">
+                   <input type="hidden" id="hash_id" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                   <div class="clearfix"></div>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                      <th>ID</th>
+					                  <th>Page Name</th>
+					                  <th>Owner</th>
+					                  <th>Category</th>
+					                  <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               <?php 
+				               foreach (Wo_GetAllPages(20) as $wo['pagelist']) {
+				                  echo Wo_LoadAdminPage('manage-pages/list');
+				                }
+				               ?>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                             <button onclick="Wo_GetMorePages();" type="button" class="btn btn-default btn-load-more waves-effect btn-lang">Load More Pages</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+function Wo_GetMorePages() {
+  after_page_id = $('.setting-pagelist:last').attr('data-page-id');
+  $('.btn-load-more').text('Please wait..');
+  $.get(Wo_Ajax_Requests_File() + '?f=admin_setting&s=get_more_pages', {after_page_id: after_page_id}, function(data) {
+    if (data.html.length != 0) {
+      $('tbody').append(data.html);
+      $('.btn-load-more').text('Load More Pages');
+    } else {
+      $('.btn-load-more').text('No More Pages');
+    }
+  });
+}
+
+function Wo_DeletePage(page_id) {
+  if (confirm("Are you sure you want to delete this page?") == false) {
+    return false;
+  }
+  hash_id = $('#hash_id').val();
+  $('#PageID_' + page_id).fadeOut(300, function() {
+    $(this).remove();
+  });
+  $.get(Wo_Ajax_Requests_File(),{f:'admin_setting',s:'delete_user_page',page_id: page_id, hash_id:hash_id});
+}
+</script>

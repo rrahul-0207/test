@@ -1,0 +1,20 @@
+<tr class="setting-invitation" data-invitation="<?php echo $wo['invitation']['id']; ?>">
+  <td >
+     <?php echo Wo_Time_Elapsed_String($wo['invitation']['posted']); ?>
+  </td>
+  <td>
+     <?php echo $wo['invitation']['code']; ?>
+  </td>
+  <td>
+     Pending
+  </td>
+  <td>
+     <span class="pointer copy-invitation-url" id="<?php echo $wo['invitation']['id']; ?>" data-link="<?php echo $wo['invitation']['url']; ?>">
+     	<i class="fa fa-clone" aria-hidden="true"></i> Copy link 
+     </span>
+     | 
+     <span class="pointer delete-admin-invitation" id="<?php echo $wo['invitation']['id']; ?>">
+     	<i class="fa fa-trash-o" aria-hidden="true"></i> Delete
+     </span>
+  </td>
+</tr>

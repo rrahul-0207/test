@@ -1,0 +1,268 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <input type="hidden" value="<?php echo $_SESSION['home_path'];?>" name="home_imgbg" id="home_imgbg"/>
+  <nav class="header-fixed1000">
+    <div class="container-fluid">
+      <a class="brand header-brand" href="<?php echo $wo['config']['site_url']; ?>">
+        <img width="130" src="<?php echo $wo['config']['theme_url'];?>/img/logo.<?php echo $wo['config']['logo_extension'];?>" alt="<?php echo $wo['config']['siteName'];?> Logo"/>
+      </a>
+        <ul class="nav navbar-nav">
+          <li class="dropdown search-container">
+            <form class="navbar-form navbar-left col-lg-12 form-group" data-toggle="dropdown" role="button" id="navbar-searchbox" role="search">
+              <div class="form-group inner-addon <?php echo Wo_RightToLeft('left-addon');?> ">
+                <i class="glyphicon fa fa-search main-color progress-icon" data-icon="search"></i>
+                <input type="text" class="form-control search-input" onkeyup="Wo_DetectSearchType(this.value)" placeholder="Search for Name, Mobile no., People and Pages <?php //echo $wo['lang']['search_header_label']; ?>" dir="auto" <?php if ($wo['loggedin'] == true) { echo 'onfocus="Wo_GetRecentSearchs()"';}?>>
+              </div>
+            </form>
+          
+            <ul class="dropdown-menu search-dropdown-container" style="margin-left:7px;" role="menu">
+              <div class="search-dropdown-result">
+                <?php
+                if ($wo['loggedin'] == true) {
+                  foreach (Wo_GetRecentSerachs() as $wo['result']) {
+                    echo Wo_LoadPage('header/search');
+                  }
+                }
+                
+                ?>
+              </div>
+              <li>
+                <span class="search-advanced-container">
+                  <a href="<?php echo Wo_SeoLink('index.php?link1=search');?>" class="search-advanced-link" data-ajax="?link1=search">
+                    <?php echo $wo['lang']['advanced_search']; ?>
+                  </a>
+                </span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <?php
+        if ($wo['loggedin'] == true) {
+        echo Wo_LoadPage('header/loggedin-header');
+        } else {
+        echo Wo_LoadPage('header/main-header');
+        }
+        ?>
+      </div>
+    </div>
+  </nav>
+</div>
+<div id="bar_loading"></div>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function($) {
+    
+     $(".search-input").keydown(function(event) {
+    if (event.keyCode == 13 && event.shiftKey == 0) {
+      event.preventDefault();
+      window.location = '<?php echo Wo_SeoLink('index.php?link1=search?query=');?>' + $(this).val();
+    }
+  });
+ 
+ /**to change home background**/
+ var home_img=$("#home_imgbg").val();
+ if(window.location=="https://mitrah.in/"){
+     $.get(Wo_Ajax_Requests_File(), {f: 'get_homebgimg'}, function(data) {
+
+        if (data.status == 200) {
+          
+          $('body').css("background","url("+data.img+") fixed");
+          $('body').css("background-size","100% auto");
+        }
+        
+      }); 
+  
+ }
+jQuery('a').bind('click', function(e) {
+   //e.preventDefault();
+   //alert("hi");
+   //$(this).attr('target', '_blank');
+   var at=$(this).attr("href");
+
+   if (e.metaKey){
+       e.preventDefault();
+       
+     window.open(at,'_blank')
+   }
+});
+jQuery('.send-invite').bind('click', function(e) {
+   //e.preventDefault();
+   alert("hi");
+   //$(this).attr('target', '_blank');
+ 
+});
+ var link=$(this).attr("href");
+ if((window.location.href=="https://mitrah.in/search?query=&r=start-up")|| (window.location.href=="https://mitrah.in/start-up")){
+    $(".header-brand").attr("href", "#");
+     
+ }
+ else {
+    $(".header-brand").attr("href", "<?php echo $wo['config']['site_url']; ?>"); 
+ }
+
+$(window).scroll(function() {
+		$.data(this, 'scrollTimer', setTimeout(function() {
+			isScrolledIntoView();
+		}, 100));
+	});
+});
+
+function isScrolledIntoView()
+{
+		$('.vjs-tech').each(function(){
+			var docViewTop = $(window).scrollTop();
+			var docViewBottom = docViewTop + $(window).height();
+			var elemTop = $(this).offset().top;
+			var elemBottom = elemTop + $(this).height();
+			//alert(this.id + ' elemBottom: ' + elemBottom + 'docViewBottom: ' + docViewBottom + 'elemTop: ' + elemTop + 'docViewTop: ' + docViewTop)
+			//alert(this.id + ' elemBottom: ' + elemBottom + 'elemTop: ' + elemTop);
+			if((elemBottom <= docViewBottom) && (elemTop >=docViewTop))
+			{
+				this.play();
+			}else{
+				this.pause();
+			}
+		});
+}
+	
+var Searchcontainer = $('.search-container');
+var SearchBox = $('.search-container .search-input');
+var SearchResult = $('.search-dropdown-result');
+
+function Wo_ChangeHomeButtonIcon() {
+
+  $('.navbar-home #home-button').html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+}
+  
+function Wo_DetectSearchType(query) {
+   
+  var Hash = smokeTheHash(query);
+  if (Hash) {
+    $('.search-advanced-container').hide(200);
+    Wo_SearchhashResult(query);
+    
+  } else {
+    $('.search-advanced-container').fadeIn(200);
+    Wo_SearchResult(query);
+    
+  }
+}
+
+function Wo_ClearSearches() {
+  $('.clear-searches').html('<i class="fa fa-spinner fa-spin"></i>');
+   $.get(Wo_Ajax_Requests_File(), {f: 'clearChat'}, function(data) {
+        if (data.status == 200) {
+           location.reload();
+        }
+   });
+}
+
+function Wo_GetRecentSearchs() {
+  $.get(Wo_Ajax_Requests_File(), {f: 'search', s: 'recent'}, function(data) {
+      if (data.status == 200) {
+          if (data.html.length > 0) {
+            SearchResult.html('<div class="recent"><div class="gray recent-searches <?php echo Wo_RightToLeft("pull-left");?>"><i class="fa fa-clock-o"></i> <?php echo $wo["lang"]["recent_searches"]?></div><div onclick="Wo_ClearSearches();" class="gray recent-searches clear-searches pointer <?php echo Wo_RightToLeft("pull-right");?>"><?php echo $wo["lang"]["clear"]?></div><div class="clear"></div></div>' + data.html);
+          }
+        }
+  });
+}
+function Wo_SearchResult(query) {
+    if (SearchBox.val() != '') {
+    
+      Wo_progressIconLoader(Searchcontainer.find('.navbar-form'));
+      Searchcontainer.addClass('open');
+      Searchcontainer.find('.search-advanced-link').attr('href','<?php echo Wo_SeoLink("index.php?link1=search&query=")?>' + query);
+      Searchcontainer.find('.search-advanced-link').attr('data-ajax','<?php echo Wo_SeoLink("?link1=search&query=")?>' + query);
+      $.get(Wo_Ajax_Requests_File(), {f: 'search', s: 'normal', query: query}, function(data) {
+        if (data.status == 200) {
+          if (data.html.length == 0) {
+            // alert(data.html);
+            SearchResult.html('<button id="send" class="btn btn-main btn-sm send-invite" style="display:block;margin:0 auto;" onClick="sendInvite();"><i class="fa fa-paper-plane-o progress-icon" data-icon="paper-plane-o"></i> Send Invitation</button>');
+          } else {
+            SearchResult.html(data.html);
+          }
+        }
+        Wo_progressIconLoader(Searchcontainer.find('.navbar-form'));
+      });
+      $(document).click(function() {
+        Searchcontainer.removeClass('open');
+      });
+    } else {
+      Searchcontainer.removeClass('open');
+    }
+}
+
+
+function Wo_SearchhashResult(query) {
+    var Searchcontainer = $('.search-container');
+    var SearchBox = $('.search-container .search-input');
+    var SearchResult = $('.search-dropdown-result');
+    if (SearchBox.val() != '') {
+      Wo_progressIconLoader(Searchcontainer.find('.navbar-form'));
+      Searchcontainer.addClass('open');
+      Searchcontainer.find('.search-advanced-link').attr('href','<?php echo Wo_SeoLink("index.php?link1=search&query=")?>' + query);
+      Searchcontainer.find('.search-advanced-link').attr('data-ajax','<?php echo Wo_SeoLink("?link1=search&query=")?>' + query);
+      $.get(Wo_Ajax_Requests_File(), {f: 'search', s: 'hash', query: query}, function(data) {
+        if (data.status == 200) {
+          if (data.html.length == 0) {
+            SearchResult.html('<span class="center-text">' + " <?php echo $wo['lang']['no_result']; ?>" + '<span>');
+          } else {
+            SearchResult.html(data.html);
+          }
+        }
+        Wo_progressIconLoader(Searchcontainer.find('.navbar-form'));
+      });
+
+      $(document).click(function() {
+        Searchcontainer.removeClass('open');
+      });
+    } else {
+      Searchcontainer.removeClass('open');
+    }
+}
+
+function smokeTheHash(str) {
+  var n = str.search("#");
+  if(n != "-1"){
+    return true;
+  } else {
+    return false;
+  }
+}
+function sendInvite(){
+      var phone =$(".search-input").val();
+      
+    var SearchResult = $('.search-dropdown-result');
+     var Searchcontainer = $('.search-container');
+     var Searchdropdown= $('.search-dropdown-container');
+      $.ajax({
+        url: Wo_Ajax_Requests_File() + '?f=invite_user',
+        type: 'POST',
+        data: {phone:phone},
+        success:function(data){
+         //alert(data);
+          data = jQuery.parseJSON(data);
+          if(data.ErrorMessage=="Done"){
+            // alert("Success");
+            Searchcontainer.addClass('open');
+            SearchResult.html('<div style="color: green;font-weight: bold;text-align: center;">Invitation Sent Successfully</div>');
+            setTimeout(function() {
+ Searchdropdown.fadeOut('fast');
+ $(".search-input").val('');
+}, 4000);
+           
+         }
+         else{
+             Searchcontainer.addClass('open');
+             SearchResult.html('<div style="color: red;font-weight: bold;text-align: center;">Please enter mobile number.</div>');
+             setTimeout(function() {
+ Searchdropdown.fadeOut('fast');
+ $(".search-input").val('');
+}, 4000);
+            
+         }
+          
+        }
+      }); 
+}
+</script>

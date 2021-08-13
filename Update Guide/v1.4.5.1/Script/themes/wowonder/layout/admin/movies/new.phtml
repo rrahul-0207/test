@@ -1,0 +1,135 @@
+<div id="film-alert">
+
+</div>
+<form id="new-film">
+	<div class="form-group">
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Movie title
+		</label>
+		<div class="col-md-9 col-ms-9 col-xs-9">
+			<input type="text" name="name" class="form-control">
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Genre
+		</label>
+		<div class="col-md-4 col-ms-9 col-xs-9">
+			<select name="genre" class="form-control">
+				<?php foreach ($wo['film-genres'] as $g_key => $g_value): ?>
+					<option value="<?php echo $g_key; ?>"><?php echo $g_value; ?></option>
+				<?php endforeach;?>
+				
+			</select>
+		</div>
+		<div class="col-md-4" id="select-film">
+           <input type="file" name="source" id="film" accept="video/*">
+        </div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Stars
+		</label>
+		<div class="col-md-9 col-ms-9 col-xs-9">
+			<textarea class="form-control" name="stars"></textarea>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Producer
+		</label>
+		<div class="col-md-9 col-ms-9 col-xs-9">
+			<input type="text" class="form-control" name="producer">
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Country
+		</label>
+		<div class="col-md-4 col-ms-9 col-xs-9">
+			<select name="country" class="form-control">
+				<?php foreach ($wo['countries'] as $c_key => $c_value): ?>
+					<option value="<?php echo $c_key; ?>"><?php echo $c_value; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="col-md-4 col-ms-9 col-xs-9">
+			<select name="quanlity" class="form-control">
+				<option value="cam">CAMRip</option>
+				<option value="ts">TS</option>
+				<option value="vsh">VHSRip</option>
+				<option value="wp">WP</option>
+				<option value="scr">SCR (VHSScr)</option>
+				<option value="dvds">DVDScr</option>
+				<option value="ts">TC</option>
+				<option value="ldr">LDRip</option>
+				<option value="tv">TVRip</option>
+				<option value="sat">SATRip</option>
+				<option value="dvb">DVBRip</option>
+				<option value="dtv">DTVRip</option>
+				<option value="dvd">DVD</option>
+				<option value="hdr">HDRip</option>
+				<option value="web-dl">WEB-DL</option>
+				<option value="hd-tv">HD-TV</option>
+				<option value="hd">HD DVD</option>
+			</select>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Release
+		</label>
+		<div class="col-md-4 col-ms-9 col-xs-9" >
+			<input type="number" class="form-control"  min="1980" max="<?php echo date('Y'); ?>" step="1" placeholder="<?php echo date('Y'); ?>" name="release">
+		</div>
+		<div class="col-md-4 col-ms-9 col-xs-9">
+			<input type="number" class="form-control" name="duration"  min="10"  max="350" placeholder="Duration">
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+		
+		<label for="name" class="col-md-2 col-sm-12 col-xs-12">
+			Description
+		</label>
+		<div class="col-md-9 col-ms-9 col-xs-9" >
+			<textarea name="description" class="form-control" rows="5"></textarea>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="form-group">
+        <label class="col-md-2" for="new-blog-desc" title="Upload"  class="pointer"><?php echo $wo['lang']['cover'] ?></label>  
+        <div class="col-md-9 main pointer" id="select-f-cover">
+           <label><i class="fa fa-camera fa-wh" aria-hidden="true"></i> <?php echo $wo['lang']['select'] ?></label>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <br>
+    <div class="publisher-hidden-option">
+         <div id="progress">
+            <span id="percent">0%</span>
+            <div class="progress">
+             <div id="bar" class="progress-bar progress-bar-striped active"></div> 
+            </div>
+            <div class="clear"></div>
+         </div>
+      </div>
+   	<div class="form-group" id="upload-film">
+		<label for="name" class="col-md-2"></label>
+		<div class="col-md-9">
+			<button type="submit" class="btn btn-main">
+           		<i class="fa fa-cloud-upload progress-icon" aria-hidden="true" data-icon="cloud-upload"></i> <?php echo $wo['lang']['upload'] ?>
+           </button>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<input type="file" class="hidden" name="cover" id="film-cover" accept="image/*">
+</form>
+

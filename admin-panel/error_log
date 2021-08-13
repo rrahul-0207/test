@@ -1,0 +1,21 @@
+[07-Apr-2018 11:47:56 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/webdev/public_html/admin-panel/index.php:6) in /home/webdev/public_html/admin-panel/index.php on line 9
+[07-Apr-2018 11:48:44 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 77
+[07-Apr-2018 11:49:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/webdev/public_html/admin-panel/index.php:8) in /home/webdev/public_html/admin-panel/index.php on line 9
+[07-Apr-2018 11:50:14 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 77
+[07-Apr-2018 12:02:28 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:05:01 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:11:46 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 79
+[07-Apr-2018 12:12:33 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 79
+[07-Apr-2018 12:12:35 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 79
+[07-Apr-2018 12:12:56 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 78
+[07-Apr-2018 12:13:41 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 78
+[07-Apr-2018 12:14:50 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminPage() in /home/webdev/public_html/admin-panel/autoload.php on line 2
+[07-Apr-2018 12:14:53 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminPage() in /home/webdev/public_html/admin-panel/autoload.php on line 2
+[07-Apr-2018 12:15:15 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 18
+[07-Apr-2018 12:15:51 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:15:53 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:15:55 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:18:15 UTC] PHP Fatal error:  Call to undefined function Wo_LoadAdminLink() in /home/webdev/public_html/admin-panel/autoload.php on line 14
+[07-Apr-2018 12:24:15 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 77
+[07-Apr-2018 12:24:50 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 77
+[07-Apr-2018 12:25:40 UTC] PHP Fatal error:  Call to undefined function Wo_GetOfflineTyping() in /home/webdev/public_html/admin-panel/autoload.php on line 78

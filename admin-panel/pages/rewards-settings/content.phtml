@@ -1,0 +1,66 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Rewards > Settings</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="body">
+                    <form class="rewards-settings" method="POST">
+                        <label class="form-label">Rewards</label>
+                        <div class="form-group">
+                            <input type="radio" name="rewards" id="rewards-enabled" value="1" <?php echo ($wo['config']['rewards'] == 1) ? 'checked': '';?>>
+                            <label for="rewards-enabled">Enabled</label>
+                            <input type="radio" name="rewards" id="rewards-disabled" value="0" <?php echo ($wo['config']['rewards'] == 0) ? 'checked': '';?>>
+                            <label for="rewards-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="rewardPostPoints" name="rewardPostPoints" class="form-control" value="<?php echo $wo['config']['rewardPostPoints']?>">
+                                <label class="form-label">Points per post actions</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="rewardInvitePoints" name="rewardInvitePoints" class="form-control" value="<?php echo $wo['config']['rewardInvitePoints']?>">
+                                <label class="form-label">Points per invite</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="rewardMinReq" name="rewardMinReq" class="form-control" value="<?php echo $wo['config']['rewardMinReq']?>">
+                                <label class="form-label">Minimum redeemn points</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+    $(function() {
+        var form_general_settings = $('form.rewards-settings');
+        form_general_settings.ajaxForm({
+            url: Wo_Ajax_Requests_File() + '?f=rewards_settings',
+            beforeSend: function() {
+                form_general_settings.find('button').text('Please wait..');
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    form_general_settings.find('button').text('Save');
+                    $('.general-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                    setTimeout(function () {
+                        $('.general-settings-alert').empty();
+                    }, 2000);
+                }
+            }
+        });
+
+    });
+
+</script>

@@ -1,0 +1,27 @@
+<tr class="setting-userads" id="userad_<?php echo $wo['user_ad']['id']?>" data-userad-id="<?php echo $wo['user_ad']['id']?>">
+   <td width="10%"><?php echo $wo['user_ad']['id']?></td>
+   <td width="20%">
+      <a href="<?php echo $wo['user_ad']['url']; ?>"> <?php echo Wo_UrlDomain($wo['user_ad']['url']); ?></a>
+   </td>
+   <td width="20%">
+      <a href="<?php echo $wo['user_ad']['user_data']['url']; ?>">
+        <img src="<?php echo $wo['user_ad']['user_data']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['user_ad']['user_data']['name']?> Avatar Picture">
+         <?php echo $wo['user_ad']['user_data']['name']; ?>
+      </a>
+   </td>
+   <td width="20%">
+     <div class="ajax-time" title="<?php echo date('c',$wo['user_ad']['posted']); ?>">
+         <?php echo Wo_Time_Elapsed_String($wo['user_ad']['posted']);?>
+     </div>
+   </td>
+   <td width="15%">
+      <span class="pointer">
+        <a href="<?php echo $wo['user_ad']['edit-url']?>"><i class="fa fa-pencil-square" aria-hidden="true"></i></a>
+      </span>
+      &nbsp;|&nbsp;
+      <span class="pointer delete-ad" id="<?php echo $wo['user_ad']['id']?>">
+      <i class="fa fa-trash-o"></i>
+      </span>
+
+   </td>
+</tr>

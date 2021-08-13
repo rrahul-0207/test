@@ -1,0 +1,215 @@
+<div class="list-group page-margin info-div">
+    <div class="add-photo row">
+       <div class="col-lg-9">
+       	<h2><?php echo $wo['lang']['tell_us'];?></h2>
+        <h4><?php echo $wo['lang']['tell_us_des'];?></h4>
+        <br>
+      <form class="setting-general-form form-horizontal" method="post">
+      <fieldset>
+         <!-- Text input-->
+         <div class="form-group">
+            <label class="col-md-2" for="first_name"><?php echo $wo['lang']['first_name']; ?></label>  
+            <div class="col-md-7">
+               <input id="first_name" name="first_name" type="text" class="form-control input-md" value="<?php echo $wo['user']['first_name']?>" autocomplete="off"> 
+            </div>
+         </div>
+         <div class="form-group">
+            <label class="col-md-2" for="email"><?php echo $wo['lang']['last_name']; ?></label>  
+            <div class="col-md-7">
+               <input name="last_name" id="last_name" type="text" class="form-control input-md" value="<?php echo $wo['user']['last_name']?>" autocomplete="off">
+            </div>
+         </div>
+         <?php
+         $cutoff   = 1930;
+         $now      = date('Y');
+         $birthday = '';
+         if ($wo['user']['birthday'] != '0000-00-00') {
+             $birthday = explode('-', $wo['user']['birthday']);
+         }
+         ?>
+         <!-- Select Basic -->
+         <div class="form-group">
+            <label class="col-md-2" for="birthday"><?php echo $wo['lang']['birthday']; ?></label>
+            <div class="col-sm-2">
+               <select id="birthday" name="age_day" class="form-control">
+                  <option value="" disabled selected><?php echo $wo['lang']['day']; ?></option>
+                  <?php
+                  for ($d = 1; $d <= 31; $d++) {
+                      $birthday_d = ($birthday[2] == $d) ? ' selected' : '';
+                      echo '  <option value="' . $d . '" ' . $birthday_d . '>' . $d . '</option>' . PHP_EOL;
+                  }
+                  ?>
+               </select>
+            </div>
+            <!-- Select Basic -->
+            <div class="col-sm-3 no-padding-left">
+               <select id="birthday" name="age_month" class="form-control">
+                  <option value="" disabled selected><?php echo $wo['lang']['month']; ?></option>
+                  <?php
+                  for ($m = 1; $m <= 12; $m++) {
+                      $birthday_m = ($birthday[1] == $m) ? ' selected' : '';
+                     echo '  <option value="' . $m . '" ' . $birthday_m . '>' . $wo['months'][$m] . '</option>' . PHP_EOL;
+                  }
+                  ?>
+               </select>
+            </div>
+            <!-- Select Basic -->
+            <div class="col-sm-2 no-padding-left">
+               <select id="birthday" name="age_year" class="form-control">
+                  <option value="" disabled selected><?php echo $wo['lang']['year']; ?></option>
+                  <?php
+                  for ($y = $now; $y >= $cutoff; $y--) {
+                      $birthday_y = ($birthday[0] == $y) ? ' selected' : '';
+                      echo '  <option value="' . $y . '" ' . $birthday_y . '>' . $y . '</option>' . PHP_EOL;
+                  }
+                  ?>
+               </select>
+            </div>
+         </div>
+         
+		 <div class="form-group">
+            <label class="col-md-2" for="gender"><?php echo $wo['lang']['gender']; ?></label>
+            <div class="col-md-7">
+				<select name="gender" id="gender" class="form-control">
+					<option value="male"><?php echo $wo['lang']['male'];?></option>
+					<option value="female"><?php echo $wo['lang']['female'];?></option>
+				</select>
+            </div>
+         </div>
+         <!-- Select Basic -->
+         <div class="form-group">
+            <label class="col-md-2" for="country">State</label>
+			
+            <div class="col-md-7">
+               <select id="state" name="state" class="form-control">
+                  <?php
+				  $st=Wo_GetStateArray(101);
+                  foreach ($st as $state_ids => $state) { 
+                    $state_id = $wo['user']['state_id'];
+                    $selected_state = ($state_ids == $state_id) ? ' selected' : '' ;
+                  ?>
+                  <option value="<?php echo $state_ids;?>" <?php echo $selected_state;?> ><?php echo $state;?></option>
+                  <?php } ?>
+               </select>
+            </div>
+         </div>
+		 <!-- Select Basic -->
+         <div class="form-group">
+            <label class="col-md-2" for="city"><?php echo "City"; ?></label>
+			
+            <div class="col-md-7">
+               <select id="city" name="city" class="form-control">
+                  
+				  
+                  
+                  <option value="0" >Please select your state first</option>
+                  
+               </select>
+            </div>
+         </div>
+		 <input type="hidden" name="country" value="101">
+         <input type="hidden" name="user_id" value="<?php echo $wo['user']['user_id'];?>">
+      </fieldset>
+   </form>
+       </div>
+       <div class="col-lg-2 continue-button">
+       	<button class="btn con-button btn-main" id="demo12"><?php echo $wo['lang']['start_up_continue'];?></button><br> <small class="skip-step" onclick="nextPage();"><?php echo $wo['lang']['start_up_skip'];?></small>
+      
+       </div>
+       <div class="clear"></div>
+    </div>
+</div>
+<div class="list-group page-margin follow-div" style="display:none;">
+    <div class="add-photo row">
+       <div class="col-lg-9">
+       <?php
+        	echo Wo_LoadPage('search/content');
+
+        ?>
+       </div>
+       <div class="col-lg-2 continue-button">
+       	<button class="con-button btn btn-main" onclick="Wo_SubmitFollow();">
+        <?php
+        $string = str_replace('{number}', count($users), $wo['lang']['follow_num']);
+        echo $string;
+        ?>
+        </button><br>
+       </div>
+       <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+function Wo_SubmitFollow() {
+	window.location.href ='https://mitrah.in/';
+}
+</script>
+<script type="text/javascript">
+$(function () {
+	
+	$('#state').on('change',function()
+	{
+		var stateID =$(this).val();
+		if(stateID)
+		{
+			$.ajax
+			({
+				type:'POST',
+				url:'ajax_requests.php',
+				data:{state_id :stateID,
+					submit: 'fetch_cities'},
+				success:function(data)
+				{
+					$('#city').html(data);
+				}
+			});
+		}
+		else{
+			$('#city').html('<option value="">Select State First</option>');
+		}
+
+	});	
+});
+
+$('#demo12').click(function (e) {
+    e.preventDefault();
+   	$("form.setting-general-form").submit();
+   		window.location.href = '<?php echo Wo_SeoLink('index.php?link1=start-up');?>';
+});
+
+$('#demo12').click(function (e) {
+    e.preventDefault();
+   	window.location.href = '<?php echo Wo_SeoLink('index.php?link1=start-up?query=');?>';
+});
+var url = window.location.href;
+if(url=="https://mitrah.in/start-up?query="){
+   $(".follow-div").show(); 
+   	$(".info-div").hide();
+}
+else {
+     $(".follow-div").hide();
+}
+function Wo_SubmitInfoForm() {
+	$("form.setting-general-form").submit();
+
+}
+function nextPage() {
+
+window.location.href = '<?php echo Wo_SeoLink('index.php?link1=search?query=&r=start-up');?>';
+}
+$(function () {
+	$('form.setting-general-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=update_user_information_startup',
+    beforeSend: function () {
+      $('button').attr('disabled', true);
+      $('button').text("<?php echo $wo['lang']['please_wait'];?>");
+    },
+    success: function (data) {
+      if(data.status == 200) {
+      
+        	window.location.href = 'https://mitrah.in/search?query=&r=start-up';
+     
+      }
+    }
+  });
+});
+</script>

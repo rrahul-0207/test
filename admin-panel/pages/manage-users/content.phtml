@@ -1,0 +1,151 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Users > Manage Users</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+          <div class="col-lg-3 col-md-3">
+            <div class="info-box bg-light-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">account_box</i>
+                </div>
+                <div class="content">
+                    <div class="text">MALE</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountUserData('male'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-light-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">account_circle</i>
+                </div>
+                <div class="content">
+                    <div class="text">FEMALE</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountUserData('female'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-light-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">people_outline</i>
+                </div>
+                <div class="content">
+                    <div class="text">ACTIVE USERS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountUserData('active'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-light-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">mail_outline</i>
+                </div>
+                <div class="content">
+                    <div class="text">INACTIVE USERS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo Wo_CountUserData('not_active'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Users</h2>
+                </div>
+                <div class="body">
+                   <div class="row">
+                       <div class="col-md-4" style="margin-bottom:0;">
+                            <form method="post" class="setting-user-filter">
+                              <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" name="query" id="query" class="form-control">
+                                        <label class="form-label search-form">Search</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="hash_id" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                           </form>
+                       </div>
+                   </div>
+                   <div class="clearfix"></div>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                      <th>ID</th>
+					                  <th>Username</th>
+					                  <th>Source</th>
+					                  <th>E-mail</th>
+					                  <th>IP Address</th>
+					                  <th>Status</th>
+					                  <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+				                foreach (Wo_GetAllUsers(20, 'ManageUsers') as $wo['userlist']) {
+				                    echo Wo_LoadAdminPage('manage-users/list');
+				                }
+				                ?>
+                            </tbody>
+                        </table>
+                        <div class="view-more-wrapper view-more-users-wrapper text-center">
+                             <button onclick="Wo_GetMoreUsers();" type="button" class="btn btn-default btn-load-more waves-effect btn-lang">Load More Users</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+  view_more_wrapper = $('.view-more-users-wrapper');
+  var filterForm = $('form.setting-user-filter');
+  $('.setting-user-filter #query').keyup(function() {
+    filterForm.submit();
+  });
+  filterForm.ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=filter_all_users',
+    beforeSend: function() {
+      $('.search-form').text('Please wait..');
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        if (data.html.length != 0) {
+          $('.center-text').text('');
+          $('tbody').html(data.html).show();
+          $('.search-form').text('Search');
+        } else {
+          $('tbody').hide();
+          $('.search-form').text('Search');
+        }
+      }
+    }
+  });
+});
+function Wo_GetMoreUsers() {
+  after_user_id = $('.user-list:last').attr('data-user-id');
+  $('.btn-load-more').text('Please wait..');
+  $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=filter_all_users&after_user_id=' + after_user_id, $('form.setting-user-filter').serialize(), function(data) {
+    if (data.html.length != 0) {
+      $('tbody').append(data.html);
+      $('.btn-load-more').text('Load More Users');
+    } else {
+      $('.btn-load-more').text('No More Users To Show');
+    }
+  });
+}
+function Wo_DeleteUser(user_id) {
+  if (confirm("Are you sure you want to delete this user?") == false) {
+    return false;
+  }
+  hash_id = $('#hash_id').val();
+  $('#UserID_' + user_id).fadeOut(300, function() {
+    $(this).remove();
+  });
+  $.get(Wo_Ajax_Requests_File(),{f:'admin_setting', s:'delete_user', user_id: user_id, hash_id: hash_id});
+}
+</script>

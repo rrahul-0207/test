@@ -1,0 +1,3 @@
+- Added audio recording to Post/Comment systems. 
+- Upgraded the API to the newest version for the new android messenger update. 
+- Fixed bugs in the script.

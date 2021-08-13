@@ -1,0 +1,202 @@
+
+<div class="list-group">
+   <div class="list-group-item"><i class="fa fa-bell-o"></i> Send notifications</div>
+   <div class="setting-well">
+      <form class="form" id="send-notification">
+         <div class="col-md-9">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="admin-notification-alert">
+                  </div>  
+               </div>
+               <div class="form-group">
+                      
+                  <label for="name" class="col-md-2">
+                     <?php echo $wo['lang']['url'] ?>
+                  </label>
+                  <div class="col-md-10">
+                     <input type="url" name="url" class="form-control">
+                  </div>
+                  <div class="clear"></div>
+               </div>   
+               <div class="form-group">
+                  <label for="name" class="col-md-2">
+                     <?php echo $wo['lang']['description'] ?>
+                  </label>
+                  <div class="col-md-10">
+                     <textarea name="description" class="form-control" rows="4"></textarea>
+                  </div>
+                  <div class="clear"></div>
+               </div>
+
+               <div class="form-group">
+                  <label for="name" class="col-md-2">
+                     <?php echo $wo['lang']['select'] ?>
+                     <?php echo $wo['lang']['users'] ?>
+                  </label>
+                  <div class="col-md-10">
+                     <div class="notifications-users-wrapp">
+                        <input type="text" class="form-control" onkeyup="Wo_GetNotifiedUsers(this)">
+
+                     </div>
+                     <div class="notifications-users-list">
+                     </div>
+                  </div>
+                  <div class="clear"></div>
+               </div>
+               <div class="form-group">
+                  <label for="name" class="col-md-2">
+                     <?php echo $wo['lang']['select'] ?>    
+                     <?php echo $wo['lang']['all'] ?>
+                  </label>
+                  <div class="col-md-10">
+                     <label>
+                        <input type="checkbox" name="all" value="all" id="sendforall">
+                     </label>
+                  </div>
+                  <div class="clear"></div>
+               </div>
+
+
+               <div class="form-group">
+                  <label for="name" class="col-md-2">
+                     
+                  </label>
+                  <div class="col-md-10">
+                     <button type="submit" class="btn btn-main">
+                              <i class="fa fa-paper-plane-o progress-icon" data-icon="paper-plane-o" ></i>
+                              <?php echo $wo['lang']['send'] ?>
+                     </button>
+                  </div>
+                  <div class="clear"></div>
+               </div>
+               <input type="reset" class="hidden">
+               <input type="text" name="notifc-users" class="hidden" id="notifc-users">
+               <input type="reset" id="reset-notif-form" class="hidden">
+            </div>
+         </div>
+         <div class="col-md-3" style="border-left: 1px solid #f4f4f4">
+            <div class="notif-selected-users">
+            </div>
+         </div>
+      </form>  
+      <div class="clear"></div>
+   </div>
+</div>
+ 
+
+<script>
+   jQuery(document).ready(function($) {
+
+      $('#send-notification').ajaxForm({
+         url: Wo_Ajax_Requests_File() + '?f=notifications&s=send',
+         type:"POST",
+         dataType:'json',
+         beforeSend: function() {
+           Wo_progressIconLoader($('#send-notification').find('button'));
+           
+         },
+         success: function(data) {
+           scrollToTop();
+           if (data['status'] == 200) {
+             $(".admin-notification-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+             $(".notifications-users-list").empty();
+             $(".notif-selected-users").empty();
+             $("#reset-notif-form").trigger('click');
+           } else if (data['status'] == 304) {
+             $(".admin-notification-alert").html('<div class="alert alert-danger">'+ data['message'] +'</div>');
+           } 
+
+           Wo_progressIconLoader($('#send-notification').find('button'));
+      }});
+   });
+
+
+   var notified_user_ids = [];
+
+   function Wo_GetNotifiedUsers(self){
+
+      if (!self || $("#sendforall").is(':checked')) {
+         $(".notifications-users-list").empty();
+         return false;
+      }
+      $.ajax({
+         url: Wo_Ajax_Requests_File() + "?f=notifications&s=get-users",
+         type: 'POST',
+         data: {name: $(self).val()},
+      })
+      .done(function(data) {
+         if (data.status == 200) {
+            $(".notifications-users-list").html(data.html);
+         }
+         else{
+            $(".notifications-users-list").empty();
+         }
+      })
+      .fail(function() {
+         console.log("error");
+      })  
+   }
+
+   function Wo_AddNotifiedUser(user_id,self){
+      if (user_id && self && !Wo_IsNotifiedUserExists(user_id)) {
+         notified_user_ids.push(user_id);
+         $(".notif-selected-users").append('<p id="'+user_id+'">'+$(self).find('span').text()+'</p>');
+         $("#notifc-users").val(notified_user_ids.join());
+         $(self).remove();
+      }
+   }
+
+   function Wo_IsNotifiedUserExists(user_id){
+      if (!user_id) {
+         return false;
+      }
+      return $(".notif-selected-users").find('p[id="'+user_id+'"]').length > 0;
+
+   }
+</script>
+
+<style>
+   .notifications-users-list{
+      width: 100%;
+      overflow:hidden;
+      border: 1px solid #f4f4f4;
+      border-top: none;
+
+   }
+   .notifications-users-list .notificated-users-item{
+      width: 100%;
+      overflow:hidden;
+      cursor: pointer;                
+   }
+
+   .notifications-users-list .notificated-users-item span{
+      width: 100%;
+      cursor: pointer;
+      padding: 5px 10px;
+      margin: 0;
+      display: block;
+      color: #333;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 14px;                   
+   }
+
+   .notifications-users-list .notificated-users-item:hover{
+      background-color: #f9f9f9; !important;                    
+   }
+
+   .notif-selected-users{
+      width: 100%;
+      max-height: 300px;
+      overflow: scroll;
+      padding: 5px;
+
+   }
+
+   .notif-selected-users p{
+      width: 100%;
+      border-bottom: 1px solid #f4f4f4;                     
+      margin-bottom: 5px;
+   }
+   
+</style>

@@ -1,0 +1,142 @@
+<nav class="navbar navbar-default movies-navbar-wrapper hidden-xs" role="navigation">
+  <div class="collapse navbar-collapse no-padding-right no-padding-left" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav movies-nav">
+      <li class="">
+      <a href="<?php echo Wo_SeoLink('index.php?link1=movies') ?>"><i class="fa fa-film fa-fw " aria-hidden="true"></i><span> <?php echo $wo['lang']['movies']; ?>
+      </span></a>
+      </li>
+      <li class="">
+      	<div class="dropdown">
+		
+  		  <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-play-circle fa-fw" aria-hidden="true"></i><span> <?php echo $wo['lang']['genre']; ?></span></a>
+  		  <ul class="dropdown-menu">
+  			<?php foreach ($wo['film-genres'] as $g_key => $genre): ?>
+  				<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-genre&genre='.$g_key); ?>"><?php echo $genre; ?></a></li>
+  			<?php endforeach;?>
+  		  </ul>
+  		</div>
+
+      </li>
+      <li class="">
+      	
+      	<div class="dropdown">
+		
+		  <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe fa-fw" aria-hidden="true"></i><span> <?php echo $wo['lang']['country']; ?></span></a>
+		  <ul class="dropdown-menu">
+	    	<?php foreach ($wo['countries'] as $c_key => $country): ?>
+				<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-country&country='.$c_key); ?>"><?php echo $country;?></a></li>
+			<?php endforeach; ?>
+		  </ul>
+		</div>
+      </li>
+      
+    </ul>
+    <div class="nav navbar-nav pull-right movies-search">
+      	<div class="w100">
+      		<i class="fa fa-search" aria-hidden="true"></i>
+      		<input type="text" placeholder="<?php echo $wo['lang']['search']; ?>" id="search-movies">
+      	</div>
+        <ul class="search-result" id="search-movies-result">
+        </ul>
+    </div>
+  </div>
+  <div class="clear"></div>
+</nav>
+
+<nav class="navbar navbar-inverse navbar-movies-mobile hidden-lg hidden-sm hidden-md">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-movies-mobile-header">
+      <li  id="open-movies-mobile-dropdown">
+        <a>
+          <i class="fa fa-reorder"></i>
+        </a>
+      </li>
+
+      <li id="open-movies-mobile-search-dropdown">
+        <a>
+          <i class="fa fa-search"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown navbar-movies-mobile-dropdown">
+    <ul class="dropdown-menu">
+        <li>
+          <div class="navbar-movies-mobile-dropdown-cont">
+            <div class="navbar-movies-mobile-dropdown-collapse">
+              <h4>
+                <i class="fa fa-film fa-fw " aria-hidden="true"></i>
+                <a href="<?php echo Wo_SeoLink('index.php?link1=movies') ?>">
+                <?php echo($wo['lang']['movies']); ?>
+                </a>
+              </h4>
+            </div>
+            <div class="navbar-movies-mobile-dropdown-collapse">
+              <h4 onclick="$(this).toggleClass('dropped-down'); $('#movies-genre-mobile-dropdown').slideToggle('fast');" class="border-top">
+                <i class="fa fa-play-circle fa-fw"></i>
+                <?php echo($wo['lang']['genre']); ?>
+              </h4>
+              <div id="movies-genre-mobile-dropdown">
+                <?php foreach ($wo['film-genres'] as $g_key => $genre): ?>
+                  <p><a href="<?php echo Wo_SeoLink('index.php?link1=movies-genre&genre='.$g_key); ?>"><?php echo $genre; ?></a></p>
+                <?php endforeach;?>
+              </div>
+            </div>
+            <div class="navbar-movies-mobile-dropdown-collapse">
+              <h4 onclick="$(this).toggleClass('dropped-down'); $('#movies-country-mobile-dropdown').slideToggle('fast');" class="border-top">
+                <i class="fa fa-globe fa-fw"></i>
+                <?php echo($wo['lang']['country']); ?>
+              </h4>
+              <div id="movies-country-mobile-dropdown">
+                <?php foreach ($wo['countries'] as $c_key => $country): ?>
+                  <p><a href="<?php echo Wo_SeoLink('index.php?link1=movies-country&country='.$c_key); ?>"><?php echo $country;?></a></p>
+                <?php endforeach; ?>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+        </li>
+    </ul>
+  </div>
+  <div class="dropdown navbar-movies-mobile-search-dropdown">
+    <ul class="dropdown-menu">
+        <li>
+          <div class="navbar-movies-mobile-dropdown-cont">
+            <form action="#">
+              <div class="inner-addon left-addon">
+                  <i class="glyphicon fa fa-search progress-icon" aria-hidden="true"></i>
+                <input type="text" value="" class="form-control" placeholder="<?php echo $wo['lang']['search'] ?>" id="search-movies">
+              </div>
+            </form>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+        </li>
+    </ul>
+  </div>
+</nav>
+<script>
+  jQuery(document).ready(function($) {
+    $("#open-movies-mobile-dropdown").click(function(event) {
+
+      $(this).toggleClass('active').siblings('li').removeClass('active');
+      $('.navbar-movies-mobile-dropdown').toggleClass('open');
+      $('.navbar-movies-mobile-search-dropdown').removeClass('open');
+    });
+
+    $("#open-movies-mobile-search-dropdown").click(function(event) {
+
+      $(this).toggleClass('active').siblings('li').removeClass('active');
+      $('.navbar-movies-mobile-search-dropdown').toggleClass('open');
+      $('.navbar-movies-mobile-dropdown').removeClass('open');
+    });
+  });
+</script>
+<style>
+  .navbar-movies-mobile{
+    color: #fff;
+    margin-top: 20px;
+    background:  <?php echo $wo['config']['btn_background_color'];?>;
+  }
+</style>

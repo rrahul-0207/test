@@ -1,0 +1,30 @@
+
+<ul class="list-group" id="sidebar-probox-list-container">
+   <li class="list-group-item text-muted " contenteditable="false">
+     <?php echo "Profession";?>
+      
+   </li>
+   <li>
+      <div class="sidebar-probox-item-container">
+         <?php $result=Wo_GetProboxContent($wo['user_profile']['id']);
+         if($result['type']==1):
+         ?>
+            <p><?php echo $result['value'];?></p>
+         <?php elseif($result['type']==2): ?>
+            <img src="<?= $wo['site_url'].'/'.$result['value']; ?>" >
+         <?php elseif($result['type']==3): ?>
+            
+               <video class="video-js vjs-big-play-centered" controls preload="auto" poster="" data-setup="{}"style="height: 250px;width:auto">
+                   <source src="<?php echo $result['value'];?>" type='video/mp4'>
+                   <source src="<?php echo $result['value'];?>" type='video/webm'>
+                   
+               </video>
+            	
+            
+         <?php endif; ?>
+      </div>
+   </li>
+   <li>
+      <div class="clear"></div>
+   </li>
+</ul>

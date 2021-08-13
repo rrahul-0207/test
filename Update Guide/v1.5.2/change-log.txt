@@ -1,0 +1,13 @@
+Change-log:
+
+1. Added privacy option for users “Share my location with public?”
+2. Added friends stories to home page.
+3. User now can view his own ads.
+4. Added the option to upload images to blog system.
+5. Added multi currency in classified.
+6. Improved admin panel, changed tables to datatable.js
+7. Improved the ads view design.
+8. Added video chat API for the windows application.
+9. Added ads prices in craete ads page.
+10. User can't create ads if wallet is empty.
+11. Fixed 40+ reported bugs / improvements.

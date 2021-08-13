@@ -1,0 +1,53 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Pro System > Manage Pro Memebers</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage Pro Memebers</h2>
+                    <button onclick="Wo_CancelPro();" type="button" class="button-cancel btn btn-danger waves-effect waves-light m-t-10"> Cancel Expired Subscriptions</button>
+                </div>
+                <div class="body">
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                  <th>ID</th>
+				                  <th>Username</th>
+				                  <th>Pro Type</th>
+				                  <th>Subscribed</th>
+				                  <th>Status</th>
+				                  <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+				                foreach (Wo_GetAllProUsers() as $wo['userlist']) {
+				                    echo Wo_LoadAdminPage('pro-memebers/list');
+				                }
+				                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function () {
+  $('table').DataTable();
+});
+function Wo_CancelPro() {
+   $('.button-cancel').text('Please wait..');
+   $.get(Wo_Ajax_Requests_File(), {f: 'admin_setting', s:'cancel_pro'}, function(data) {
+      if (data.status == 200) {
+      	 $('.button-cancel').text('Expired subscriptions has been cleared');
+      }
+   });
+}
+</script>

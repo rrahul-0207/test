@@ -1,0 +1,369 @@
+<div class="page-margin"> 
+   <div class="row">
+      <div class="col-md-8 profile-lists">
+           <div class="read-blog">
+             <h2><?php echo $wo['article']['title']?></h2>
+             <div class="read-blog-desc">
+               <p><?php echo $wo['article']['description']; ?></p>
+             </div>
+             <div class="read-blog-info <?php echo Wo_RightToLeft('text-left') ?>">
+               <?php
+               $posted = str_replace('{BLOG_TIME}', Wo_Time_Elapsed_String($wo['article']['posted']), $wo['lang']['posted_on_blog']);
+               $posted = str_replace('{CATEGORY_NAME}', '<a href="' . $wo['article']['category_link'] . '" class="main">' . $wo['article']['category_name'] . '</a>', $posted);
+               ?>
+               <p><?php echo $posted; ?></p>
+             </div>
+             <div class="read-blog-info-user">
+               <div class="col-md-9">
+                 <div class="user-image <?php echo Wo_RightToLeft('pull-left'); ?>">
+                   <a href="<?php echo $wo['article']['author']['url']?>"><img src="<?php echo $wo['article']['author']['avatar']?>" alt="User Image"></a>
+                 </div>
+                 <div class="user-name">
+                   <a href="<?php echo $wo['article']['author']['url']?>"><?php echo $wo['article']['author']['name']?></a>
+                   <div class="small">
+                   <?php
+                   echo Wo_CountFollowers($wo['article']['author']['user_id']) . ' ';
+                   if ($wo['config']['connectivitySystem'] == 1) {
+                      echo $wo['lang']['friends_btn'];
+                   } else {
+                      echo $wo['lang']['followers'];
+                   }
+                   ?>
+                 </div>
+                 </div>
+               </div>
+               <div class="col-md-3 views <?php echo Wo_RightToLeft('text-right'); ?>">
+                 <?php echo $wo['article']['view']?> <?php echo $wo['lang']['views']?>
+               </div>
+               <div class="clear"></div>
+             </div>
+             <div class="blog-share-buttons">
+                <ul class="list-inline">
+                  <li>
+                    <a href="https://www.facebook.com/sharer.php?u=<?php echo urlencode($wo['article']['url']) ?>" target="_blank">
+                      <div class="btn-share btn-facebook"><i class="fa fa-facebook"></i> Share</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://plus.google.com/share?url=<?php echo urlencode($wo['article']['url']) ?>" target="_blank">
+                      <div class="btn-share btn-google"><i class="fa fa-google-plus"></i> Google+</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="http://twitter.com/intent/tweet?text=<?php echo $wo['article']['title'] ?>&amp;url=<?php echo urlencode($wo['article']['url']) ?>" target="_blank">
+                      <div class="btn-share btn-twitter"><i class="fa fa-twitter"></i> Tweet</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="http://www.reddit.com/submit?url=<?php echo urlencode($wo['article']['url']) ?>" target="_blank">
+                      <div class="btn-share btn-reddit"><i class="fa fa-reddit"></i> Reddit</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="http://pinterest.com/pin/create/button/?url=<?php echo urlencode($wo['article']['url']) ?>" target="_blank">
+                      <div class="btn-share btn-pinterest"><i class="fa fa-pinterest"></i> Pin</div>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+            <div class="read-content">
+              <?php echo htmlspecialchars_decode($wo['article']['content']); ?>
+            </div>
+            <div class="read-tags main"><?php echo $wo['lang']['tags'] ?>:
+              <?php if (is_array($wo['article']['tags_array'])) {
+                foreach ($wo['article']['tags_array'] as $key => $tag) {
+                 ?>
+                 <a href="<?php echo Wo_SeoLink('index.php?link1=hashtag&hash=' . $tag) ?>"><?php echo $tag ?></a>,
+                 <?php
+                }
+              } ?>
+            </div>
+            </div>
+            <?php if ($wo['loggedin'] == true): ?>           
+            <div class="blog-com-wrapper">
+              <div class="blog-com-top">
+                <h4 class="pull-left"><span><?php echo Wo_GetBlogCommentsCount($wo['article']['id']); ?></span> <?php echo $wo['lang']['comments']; ?></h4>
+              </div>
+              <div class="col-md-1 col-sm-1 col-xs-1 blog-com-head pull-left">
+                <img src="<?php echo $wo['user']['avatar']; ?>" alt="Picture" width='50'>
+                <div class="clear"></div>
+              </div>
+              <div class="blog-com-box col-md-11 col-sm-11 col-xs-11">
+                <form  class="form">
+                  <div class="w100">
+                    <textarea  id="blog-comment" name="text" class="form-control" placeholder="Wrire a comment"></textarea>
+                    <div class="blog-com-box-act">
+                      <button id="add-art-comment" class="btn pull-right bg-main" type="button">
+                        <?php echo $wo['lang']['post']; ?>
+                      </button>
+                      <button class="btn pull-right" type="reset"><?php echo $wo['lang']['cancel']; ?></button>
+                    </div>
+                    <br>
+                    <hr>
+                  </div>
+                  <div class="clear"></div>
+                </form>
+                <div class="clear"></div>
+              </div>
+              <div class="blog-comlist-container">
+                <?php 
+                  foreach (Wo_GetBlogComments(array('blog_id'=> $wo['article']['id'])) as $wo['comment']) {
+                    echo Wo_LoadPage('blog/comment-list');
+                  }
+                ?>
+              </div>
+              <div class="posts_load">
+                 <?php if (count(Wo_GetBlogCommentsCount($wo['article']['id'])) > 5): ?>
+                    <div class="load-more">
+                            <button class="btn btn-default text-center pointer load-more-blog-comments">
+                            <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more'] ?></button>
+                    </div>
+                 <?php endif ?>
+              </div>
+            </div>
+            <?php endif;?>
+      </div>
+      <div class="col-md-4"><?php echo Wo_LoadPage('blog/sidebar') ?></div>
+   </div>
+   <!-- .row -->
+</div>
+
+<script>
+jQuery(document).ready(function($) {
+  $(".load-more-blog-comments").click(function(event) {
+    var self    = $(this);
+    var last_id = 0;
+    if ($("div[data-blog-comment]").length > 0) {
+      last_id = $("div[data-blog-comment]").last().attr('data-blog-comment');
+    }
+    $.ajax({
+      url: Wo_Ajax_Requests_File(),
+      type: 'GET',
+      dataType: 'json',
+      data: {
+        f:'load-blog-comments',
+        offset:last_id,
+        b_id:<?php echo $wo['article']['id']; ?>
+      },
+    }).done(function(data) {
+      if (data.status == 200) {
+        $(".blog-comlist-container").append(data.html);
+      }
+      else if(data.status == 404){
+        self.text(data.html);
+      }
+    }).fail(function() {
+      console.log("Something went wrong. Try again later");
+    })
+  });
+
+  $("#blog-comment").focus(function(event) {
+   $(this).css('height', '80px');
+  });
+  $(document).on('click', ".delete-my-blog",function() {
+    $.ajax({
+      type: "GET",
+      url: Wo_Ajax_Requests_File(),
+      data: {id: $(this).attr("id"),f:'delete-my-blog'},
+      dataType:'json',
+      success: function(data) {
+         if(data['status'] == 200){
+            $("div[data-rm-blog='"+ data['id'] +"']").remove()
+         } else {
+            alert(data['status'])
+         }
+      }
+    });   
+  });
+
+  $(document).on('click', ".del-blog-comment",function() {
+    var  self = $(this);
+    $.ajax({
+      type: "GET",
+      url: Wo_Ajax_Requests_File(),
+      data: {id: self.attr("id"),f:'del-blog-comment',b_id:<?php echo $wo['article']['id']; ?>},
+      dataType:'json',
+      success: function(data) {
+         if(data['status'] == 200){
+            $("div[data-blog-comment='"+ self.attr('id') +"']").slideUp(function(){
+              $(".blog-com-top h4 span").text(data.comments);
+              $(this).remove();
+            })
+         }
+      }
+    });   
+  });
+
+  $(document).on('click', ".del-blog-commreplies",function() {
+    var  self = $(this);
+    $.ajax({
+      type: "GET",
+      url: Wo_Ajax_Requests_File(),
+      data: {id: self.attr("id"),f:'del-blog-commreplies',b_id:<?php echo $wo['article']['id']; ?>},
+      dataType:'json',
+      success: function(data) {
+         if(data['status'] == 200){
+            $("div[data-blog-comment-reply='"+ self.attr('id') +"']").slideUp(function(){
+              var comments = Number($(".blog-com-top h4 span").text());
+              $(".blog-com-top h4 span").text(comments -= 1);
+              $(this).remove();
+            })
+         }
+      }
+    });   
+  });
+
+  $(document).on('click', ".reply-toblogcomm-reply",function() {
+    $('.blog-comment-reply-box').each(function(index, el) {
+      $(el).addClass('hidden');
+    });
+    var  self = $(this);
+    var name  = $("div[data-blog-comment-reply='"+self.attr('id')+"']").find('a b').text();
+    $("div[data-blog-comment='"+self.attr('data-blog-commId')+"']").find('.blog-comment-reply-box').removeClass('hidden').find('textarea').val(name +": ");
+  });
+
+  $(document).on('click', ".reply-toblog-comm",function() {
+    $('.blog-comment-reply-box').each(function(index, el) {
+      $(el).addClass('hidden');
+    });
+    var  self = $(this);
+    $("div[data-blog-comment='"+self.attr('id')+"']").find('.blog-comment-reply-box').toggleClass('hidden').find('textarea').val('');
+    
+  });
+
+  $("#add-art-comment").click(function(event) {
+    $.ajax({
+      url: Wo_Ajax_Requests_File() + '?f=add-blog-comm',
+      type: 'POST',
+      dataType: 'json',
+      data: {text:$("#blog-comment").val(),blog:<?php echo $wo['article']['id']; ?>},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        $("#blog-comment").val('');
+        $(".blog-comlist-container").prepend(data.html);
+        $(".blog-com-top h4 span").text(data.comments);
+      }
+    })
+    .fail(function() {
+      console.log("Something went wrong. Try again later");
+    })    
+  });
+
+});
+
+//functions
+function Wo_AddBlogCommentLike(id){
+  if (!id) {
+    return false;
+  }
+  var comment_id = id;
+  Wo_Delay(function(){
+    $.ajax({
+      url: Wo_Ajax_Requests_File() + '?f=add-blog-commlikes',
+      type: 'POST',
+      dataType: 'json',
+      data: {id:comment_id,blog_id:<?php echo $wo['article']['id']; ?>},
+    }).done(function(data) {
+      if (data.status == 200) {
+        $("span[data-blog-comdislikes='"+comment_id+"']").text(data.dislikes);
+        $("span[data-blog-comlikes='"+comment_id+"']").text(data.likes);
+      }
+    }).fail(function() {
+      console.log("Something went wrong. Try again later");
+    })
+  },0);
+  
+}
+
+function Wo_AddBlogCommentDisLike(id){
+  if (!id) {
+    return false;
+  }
+  var comment_id = id;
+  Wo_Delay(function(){
+    $.ajax({
+      url: Wo_Ajax_Requests_File() + '?f=add-blog-commdislikes',
+      type: 'POST',
+      dataType: 'json',
+      data: {id:comment_id,blog_id:<?php echo $wo['article']['id']; ?>},
+    }).done(function(data) {
+      if (data.status == 200) {
+        $("span[data-blog-comdislikes='"+comment_id+"']").text(data.dislikes);
+        $("span[data-blog-comlikes='"+comment_id+"']").text(data.likes);
+      }
+    }).fail(function() {
+      console.log("Something went wrong. Try again later");
+    })
+  },0);
+  
+}
+function Wo_AddBlogCommReplyLike(id){
+  if (!id) {
+    return false;
+  }
+  var reply_id = id;
+  Wo_Delay(function(){
+    $.ajax({
+      url: Wo_Ajax_Requests_File() + '?f=add-blog-crlikes',
+      type: 'POST',
+      dataType: 'json',
+      data: {id:reply_id,blog_id:<?php echo $wo['article']['id']; ?>},
+    }).done(function(data) {
+      if (data.status == 200) {
+        $("span[data-blog-comrlikes='"+reply_id+"']").text(data.likes);
+        $("span[data-blog-comrdislikes='"+reply_id+"']").text(data.dislikes);
+      }
+    }).fail(function() {
+      console.log("Something went wrong. Try again later");
+    })
+  },0);
+  
+}
+
+function Wo_AddBlogCommReplyDisLike(id){
+  if (!id) {
+    return false;
+  }
+  var reply_id = id;
+  Wo_Delay(function(){
+    $.ajax({
+      url: Wo_Ajax_Requests_File() + '?f=add-blog-crdislikes',
+      type: 'POST',
+      dataType: 'json',
+      data: {id:reply_id,blog_id:<?php echo $wo['article']['id']; ?>},
+    }).done(function(data) {
+      if (data.status == 200) {
+        $("span[data-blog-comrlikes='"+reply_id+"']").text(data.likes);
+        $("span[data-blog-comrdislikes='"+reply_id+"']").text(data.dislikes);
+      }
+    }).fail(function() {
+      console.log("Something went wrong. Try again later");
+    })
+  },0);
+  
+}
+
+function Wo_RegisterBlogCommReply(id,event,self){
+  if (event.keyCode==13&&event.shiftKey==0&&event&&id&&self) {
+    var text = self.value;
+    if (text.length >= 2) {
+      $.ajax({
+        url: Wo_Ajax_Requests_File() + '?f=add-blog-commreply',
+        type: 'POST',
+        dataType: 'json',
+        data: {c_id:id,text:text,b_id:<?php echo $wo['article']['id']; ?>},
+      }).done(function(data) {
+        if (data.status == 200) {
+          $("div[data-blog-comment='"+id+"']").find('.blog-comment-reply-cont').append(data.html);
+          $(".blog-com-top h4 span").text(data.comments);
+          self.value = '';
+        }
+      }).fail(function() {
+        console.log("Something went wrong. Try again later");
+      })     
+    }
+  }
+
+}
+</script>

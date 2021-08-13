@@ -1,0 +1,51 @@
+<div class="movies-comment-item" data-movies-comment-reply="<?php echo $wo['comm-reply']['id']; ?>">
+  <div class="col-md-1 col-sm-1 col-xs-1 hidden-xs"></div>
+  <div class="col-md-1 col-sm-1 col-xs-1 pull-left movies-comment-item-img hidden-xs">
+    <img src="<?php echo $wo['comm-reply']['user_data']['avatar']; ?>" alt="" class="responsive-img">
+  </div>
+  <div class="col-md-10 col-sm-10 col-xs-10  pull-right movies-comment-item-body">
+    <h5>
+      <a class="pointer" data-ajax="?link1=timeline&u=<?php echo $wo['comm-reply']['user_data']['username']; ?>" href="<?php echo $wo['comm-reply']['user_data']['url']; ?>">
+        <b><?php echo $wo['comm-reply']['user_data']['name']; ?></b>
+      </a>
+      <span class="time">
+        <span class="ajax-time" title="<?php echo date('c',$wo['comm-reply']['posted']); ?>">
+          <?php echo Wo_Time_Elapsed_String($wo['comm-reply']['posted']); ?>
+        </span>
+      </span>
+      <?php if ($wo['comm-reply']['is_owner']): ?>
+  	  	<span class="pointer pull-right del-movies-commreplies" id="<?php echo $wo['comm-reply']['id']; ?>">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+        </span>
+	  <?php endif ?>
+    </h5>
+    <p><?php echo $wo['comm-reply']['text']; ?></p>
+    <div>
+      <span class="comment-icons">
+        <span class="pointer reply-tomoviecomm-reply"  data-movies-commId="<?php echo $wo['comm-reply']['comm_id']; ?>" id="<?php echo $wo['comm-reply']['id']; ?>">
+          <i class="fa fa-comment progress-icon" data-icon="comment"></i>
+        </span>
+        &nbsp;
+        <span class="pointer add-movies-commreply-likes-<?php echo $wo['comm-reply']['id']; ?>" onclick="Wo_AddMovieCommReplyLike(<?php echo $wo['comm-reply']['id']; ?>)">
+        	<i class="fa fa-thumbs-up progress-icon" data-icon="thumbs-up"></i>
+        </span> 
+        <span id="movies-comment-likes" data-movies-comrlikes="<?php echo $wo['comm-reply']['id']; ?>">
+          <?php if ($wo['comm-reply']['likes'] > 0): ?>
+            <?php echo $wo['comm-reply']['likes']; ?>
+          <?php endif ?>
+        </span> 
+        &nbsp;
+        <span class="pointer add-movies-commreply-likes-<?php echo $wo['comm-reply']['id']; ?>" onclick="Wo_AddMovieCommReplyDisLike(<?php echo $wo['comm-reply']['id']; ?>)">
+          <i class="fa fa-thumbs-down progress-icon" data-icon="thumbs-up"></i>
+        </span> 
+        <span id="movies-comment-likes" data-movies-comrdislikes="<?php echo $wo['comm-reply']['id']; ?>">
+          <?php if ($wo['comm-reply']['dislikes'] > 0): ?>
+            <?php echo $wo['comm-reply']['dislikes']; ?>
+          <?php endif ?>
+        </span>
+        
+        
+      </span>
+    </div>
+  </div>
+</div>

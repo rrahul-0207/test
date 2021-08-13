@@ -1,0 +1,5 @@
+Change-log:
+
+Added more regions to Amazon S3. 
+Added explore link to left sidebar.
+Fixed 15+ reported bugs in script & API.

@@ -1,0 +1,6 @@
+Added movies system.
+Added translate system for posts.
+Added video views system.
+Fixed twilio SMS bug.
+Fixed bugs in the native app API.
+Fixed few bugs in the script.

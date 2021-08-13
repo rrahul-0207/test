@@ -1,0 +1,3 @@
+﻿- Added blog system.
+- Final release for full API system (for native apps).
+- Fixed few bugs.

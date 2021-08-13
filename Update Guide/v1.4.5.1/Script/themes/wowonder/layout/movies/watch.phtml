@@ -1,0 +1,184 @@
+<?php 
+$sql = mysqli_query($wo['sqlConnect'], "UPDATE " . T_MOVIES. " SET `views` = `views` + 1 WHERE `id` = '" . $wo['movie']['id'] . "'");
+?>
+ <div class="container-fluid">
+	<div class="row">
+		<ul class="breadcrumb watch-film-top-nav hidden-xs">
+		    <li><a href="<?php echo $wo['site_url']; ?>"><i class="fa fa-home"></i> <?php echo $wo['config']['siteName'] ?></a></li>
+		    <li>
+			    <a href="<?php echo Wo_SeoLink('index.php?link1=movies') ?>">
+			    <?php echo $wo['lang']['movies']; ?>
+			    </a>
+		    </li>
+		    <li><?php echo ucfirst($wo['movie']['genre']); ?></li>
+		    <li><?php echo ucfirst($wo['movie']['name']); ?></li>
+		</ul>
+		<div class="film-player-wrapper">
+			<div class="video-js-responsive-container vjs-hd">
+			<video onplay="" class="video-js vjs-big-play-centered" controls preload="auto" poster="" data-setup="{}">
+			    <source src="<?php echo $wo['movie']['source']; ?>" type='video/mp4'>
+			    <source src="<?php echo $wo['movie']['source']; ?>" type='video/webm'> 
+			</video>
+			</div>	
+			<script src="<?php echo $wo['config']['theme_url'];?>/player/Video/video.js"></script>
+		</div>
+		<div>
+			<div class="played-film-description-wrapper">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="played-film-description hidden-xs">
+						<div class="played-film-image-wrap">
+							<img alt="<?php echo $wo['movie']['name']; ?>" title="<?php echo $wo['movie']['name']; ?>" src="<?php echo $wo['movie']['cover']; ?>" class="responsive-img">
+						</div>
+						<div class="played-film-meta">
+							<h3><?php echo $wo['movie']['name']; ?> <small>(<?php echo $wo['movie']['release']; ?>)</small></h3>
+							<p class="time"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $wo['movie']['duration']; ?> min</p>
+							<p class="share-film">
+							<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $wo['movie']['url']; ?>" target="_blank">
+								<i class="fa fa-facebook-official" aria-hidden="true"></i>
+							</a>
+							<a href="https://twitter.com/intent/tweet?text=<?php echo $wo['movie']['url']; ?>" target="_blank">
+								<i class="fa fa-twitter-square" aria-hidden="true"></i>
+							</a>
+							<a href="https://plus.google.com/share?url=<?php echo $wo['movie']['url']; ?>" target="_blank">
+								<i class="fa fa-google-plus-square" aria-hidden="true"></i>
+							</a>
+							</p>
+							<p class="about-film"><?php echo $wo['movie']['description']; ?></p>
+							<?php if (strlen($wo['movie']['description']) > 245): ?>
+							<div class="slide-film-desc">
+								<span><?php echo $wo['lang']['more']; ?></span>
+							</div>
+							<?php endif; ?>
+							
+							<div class="played-film-details">
+							<ul class="col-md-6">
+								<li>
+									<p>
+									<span class="m-mata-tag"><?php echo $wo['lang']['genre']; ?>:</span>
+									<span class="main"><?php echo ucfirst($wo['movie']['genre']); ?></span>
+									</p>
+								</li>
+								<li>
+									<p>
+										<span class="m-mata-tag"><?php echo $wo['lang']['stars']; ?>:</span>
+										<span class="main"><?php echo $wo['movie']['stars']; ?></span>
+									</p>
+								</li>
+								<li>
+									<p>
+										<span class="m-mata-tag"><?php echo $wo['lang']['producer']; ?>:</span>
+										<span class="main"><?php echo $wo['movie']['producer']; ?></span>
+									</p>
+								</li>
+
+							</ul>
+							<ul class="col-md-6">
+
+							<li>
+								<p>
+									<span class="m-mata-tag"><?php echo $wo['lang']['release']; ?>:</span>
+									<span class="main"><?php echo $wo['movie']['release']; ?></span>
+								</p>
+							</li>
+							<li>
+								<p>
+									<span class="m-mata-tag"><?php echo $wo['lang']['quality']; ?>:</span>
+									<span class="badge"><?php echo strtoupper($wo['movie']['quality']); ?></span>
+								</p>
+							</li>
+							<li>
+								<p>
+									<span class="m-mata-tag"><?php echo $wo['lang']['views']; ?>:</span>
+									<span class="main"><?php echo strtoupper($wo['movie']['views']); ?></span>
+								</p>
+							</li>
+
+							</ul>
+							</div>
+							
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="related-movies-container">
+				<div class="col-md-12">
+					<div class="related-movies-wrapper">
+						<h4 class="related-movies"><?php echo $wo['lang']['more_like_this']; ?></h4>
+						<?php if (count($wo['related-films']) > 0): ?>
+							<div class="related-movies-carousel">
+								<?php foreach ($wo['related-films']as $wo['filmInfo']): ?>
+									<?php echo Wo_LoadPage('movies/includes/related-list'); ?>
+								<?php endforeach; ?>
+							</div>
+						<?php else: ?>
+							<?php echo '<h5 class="search-filter-center-text"> '. $wo['lang']['no_movies_found'] .' </h5>';?>
+						<?php endif; ?>
+					</div>
+					<div class="clear"></div>
+					
+				</div>
+				<div class="col-md-12 col-xs-12 col-sm-12">
+					<div class="fb-comments" data-href="<?php echo $wo['site_url']; ?>/movies/watch/<?php echo $_GET['film-id']; ?>/" data-numposts="5" data-width="100%"></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+</div>
+<div id="fb-root"></div>
+<script>
+	
+	(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=1755264744788554";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+	jQuery(document).ready(function($) {
+		$(".related-movies-carousel").owlCarousel({
+			loop:false,
+			margin:15,
+			responsive:{
+					0:{
+							items:2,
+
+					},
+					520:{
+							items:3,
+					},
+					560:{
+							items:4,
+					},
+					768:{
+							items:5,
+					},
+					992:{
+							items:6,
+					},
+					1200:{
+							items:6,
+					}
+			}
+		});
+		
+		$('.slide-film-desc').click(function(event) {
+			$('.about-film').toggleClass('unsetheight');
+		});
+
+	});
+</script>
+
+<style>
+.watch-film-top-nav {
+	padding: 10px;
+	background-color: <?php echo $wo['config']['btn_background_color'];?> !important;
+}
+.watch-film-top-nav a, .watch-film-top-nav li {
+	color: <?php echo $wo['config']['btn_color'];?> !important;
+}
+
+</style>

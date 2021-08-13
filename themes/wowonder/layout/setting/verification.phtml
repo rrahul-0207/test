@@ -1,0 +1,193 @@
+<?php if (Wo_IsAdmin()) {
+   header('Location: ' . $wo['config']['site_url'] . '/admincp/verifications_requests');
+   exit();
+} ?>
+
+<div class="list-group">
+  <div class="list-group-item">
+  <i class="fa fa-check-circle verified-color" aria-hidden="true"></i> 
+  <?php echo $wo['lang']['profile_verification']; ?> 
+  </div>
+   <div class="setting-well">
+      <?php if (Wo_IsVerificationRequestExists()): ?>
+         <div class="verification-status">
+            <h4>
+               <i class="fa fa-info-circle" aria-hidden="true"></i> 
+               <?php echo $wo['lang']['verification_sent']; ?> 
+            </h4>
+         </div>
+      <?php elseif($wo['user']['verified'] == 1): ?>
+         <div class="verification-status">                                             
+            <h4>
+               <i class="fa fa-check-circle verified-color" data-toggle="tooltip" title="" data-original-title="Verified User"></i>
+               <?php echo $wo['lang']['verification_complete']; ?> 
+            </h4>
+         </div>
+      <?php else: ?>
+      <form action="#" method="post" class="form-horizontal setting-verification-form">
+         <fieldset>
+            <div id="verificate-user-alert"></div>
+            <div class="form-group">
+               <label class="col-md-2" ><?php echo $wo['lang']['name']; ?>:</label>
+               <div class="col-md-10">
+                  <input  name="name" type="text" class="form-control input-md">
+               </div>
+            </div>
+
+            <div class="form-group">
+               <label class="col-md-2" ><?php echo $wo['lang']['message']; ?>:</label>
+               <div class="col-md-10">
+                  <textarea name="text" class="form-control" id="text" rows="5"></textarea>
+               </div>
+            </div>
+
+            <div class="form-group">
+               <label class="col-md-2"></label>
+               <div class="col-md-10">
+                 <div class="select-user-verification-data">
+                     <h3><?php echo $wo['lang']['upload_docs']; ?></h3>
+                     <p class="main"><?php echo $wo['lang']['select_verif_images']; ?></p>
+                     <div class="select-user-verification-photos">
+                        <div class="pull-left text-center" id="verif-id">
+                           <span><?php echo $wo['lang']['passport_id']; ?></span>     
+                           <p>
+                              <i class="fa fa-id-card-o"></i>
+                           </p>
+                        </div>
+                        <div class="pull-right text-center" id="verif-photo">
+                           <span><?php echo $wo['lang']['your_photo']; ?></span>
+                           <p>
+                              <i class="fa fa-picture-o" aria-hidden="true"></i>
+                           </p>
+                        </div>
+                     </div>
+                     <div class="clear"></div> 
+                 </div>
+               </div>
+            </div>
+            <hr>
+            <div class="form-group last-btn">
+               <label class="col-md-2"></label>
+               <div class="col-sm-3 text-left">
+                  <button type="submit" class="btn btn-main">
+                  <i class="fa fa-share-square-o progress-icon" data-icon="share-square-o"></i> <?php echo $wo['lang']['send']; ?>
+                  </button>
+               </div>
+            </div>
+         </fieldset>
+         <input type="file" name="passport" class="hidden" id="select-passport-photo" >
+         <input type="file" name="photo" class="hidden" id="select-user-photo" >
+         <input type="reset" class="hidden" id="reset-verification-request">
+      </form>
+      <?php endif; ?>
+   </div>
+</div>
+<script src="<?php echo $wo['config']['theme_url'];?>/javascript/autosize.min.js"></script>
+<script>
+   jQuery(document).ready(function($) {
+      $("#text").autogrow({vertical: true, horizontal: false});
+
+      $("#verif-id").click(function(event) {
+         $("#select-passport-photo").trigger('click');
+      });
+
+      $("#verif-photo").click(function(event) {
+         $("#select-user-photo").trigger('click');
+      });
+
+      $("#select-passport-photo").change(function(event) {
+         $("#verif-id").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture' class='responsive-img'>")
+      });
+
+      $("#select-user-photo").change(function(event) {
+         $("#verif-photo").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture' class='responsive-img'>")
+      });
+
+      
+      $(".setting-verification-form").ajaxForm({
+         url: Wo_Ajax_Requests_File() + '?f=verificate-user',
+         beforeSend: function() {
+           Wo_progressIconLoader($(".setting-verification-form").find('button'));
+         },
+         success: function(data) {
+           scrollToTop();
+           if (data['status'] == 200) {
+             $("#verificate-user-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+             window.location = data['url'];
+           }
+           else {
+             $("#verificate-user-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+           } 
+           Wo_progressIconLoader($(".setting-verification-form").find('button'));
+      }});
+
+
+   });
+</script>
+
+<style>
+   .select-user-verification-data{
+      width: 100%;
+      overflow: hidden;
+      
+   }
+   .select-user-verification-data h3{
+      width: 100%;
+      margin: 5px 0 5px 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      font-family: 'Hind',arial,sans-serif;
+      letter-spacing: 1px;
+   }
+
+   .select-user-verification-data p{
+      width: 100%;
+      margin: 0;
+      font-size: 13px;
+      color: #333;
+      font-family:arial,sans-serif;
+   }
+
+   .select-user-verification-data .select-user-verification-photos{
+      width: 100%;
+      overflow: hidden;   
+   }
+
+   .select-user-verification-data .select-user-verification-photos div{
+      width: 49%;
+      height: 150px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #f2f2f2;
+      margin-top: 15px;
+      color: #333;
+      overflow: hidden;
+      cursor: pointer; 
+   }
+   .select-user-verification-data .select-user-verification-photos div span{
+      width: 100%;
+      display: block;
+      font-size: 13px;
+      margin-top: 35px;
+      color: #55acee;
+   }
+
+   .select-user-verification-data .select-user-verification-photos div p{
+      width: 100%;
+      font-size: 30px;
+   }
+
+   .verification-status{
+      width: 100%;
+      height: 200px;
+      text-align: center;
+   }
+   .verification-status h4{
+      width: 100%;
+      line-height: 200px;
+      font-family: arial,sans-serif;
+      color: #666; 
+   }
+</style>
+

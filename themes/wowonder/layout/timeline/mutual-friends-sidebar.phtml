@@ -1,0 +1,26 @@
+<?php
+if($wo['user_profile']['id'] != $wo['user']['user_id']):
+if (Wo_FriendPrivacy($wo['user_profile']['id'],$wo['user_profile']['friend_privacy'])): ?>
+<ul class="list-group" id="sidebar-followers-list-container">
+   <li class="list-group-item text-muted " contenteditable="false">
+     <?php echo "Mutual Friends";?>
+      <span onclick="Wo_GetFollowers(<?php echo $wo['user_profile']['user_id']?>);" class="<?php echo Wo_RightToLeft('pull-right');?> refresh">
+      <i class="fa fa-repeat progress-icon" data-icon="repeat"></i>
+      </span>
+   </li>
+   <li>
+      <div class="sidebar-followers-users-container">
+          <?php 
+          foreach (Wo_GetFollowing($wo['user_profile']['user_id'], 'sidebar', 9) as $wo['UsersList']) {
+            $wo['UsersList']['user_name'] = mb_substr($wo['UsersList']['name'], 0, 10, "utf-8");
+            echo Wo_LoadPage('sidebar/profile-sidebar-mutual-user-list');
+          }
+          ?>
+      </div>
+   </li>
+   <li>
+      <div class="clear"></div>
+   </li>
+</ul>
+<?php endif;
+endif;?>

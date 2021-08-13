@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default movies-navbar-wrapper" role="navigation">
+  <div class="collapse navbar-collapse no-padding-right no-padding-left" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav movies-nav">
+      <li class="">
+      <a href="<?php echo Wo_SeoLink('index.php?link1=movies') ?>"><i class="fa fa-film fa-fw " aria-hidden="true"></i><span> <?php echo $wo['lang']['movies']; ?>
+      </span></a>
+      </li>
+      <li class="">
+      	<div class="dropdown">
+		
+		  <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-play-circle fa-fw" aria-hidden="true"></i><span> <?php echo $wo['lang']['genre']; ?></span></a>
+		  <ul class="dropdown-menu">
+			<?php foreach ($wo['film-genres'] as $g_key => $genre): ?>
+				<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-genre&genre='.$g_key); ?>"><?php echo $genre; ?></a></li>
+			<?php endforeach;?>
+		  </ul>
+		</div>
+
+      </li>
+      <li class="">
+      	
+      	<div class="dropdown">
+		
+		  <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe fa-fw" aria-hidden="true"></i><span> <?php echo $wo['lang']['country']; ?></span></a>
+		  <ul class="dropdown-menu">
+	    	<?php foreach ($wo['countries'] as $c_key => $country): ?>
+				<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-country&country='.$c_key); ?>"><?php echo $country;?></a></li>
+			<?php endforeach; ?>
+		  </ul>
+		</div>
+      </li>
+      
+    </ul>
+    <div class="nav navbar-nav pull-right movies-search">
+      	<div class="w100">
+      		<i class="fa fa-search" aria-hidden="true"></i>
+      		<input type="text" placeholder="<?php echo $wo['lang']['search']; ?>" id="search-movies">
+      	</div>
+        <ul class="search-result" id="search-movies-result">
+        </ul>
+    </div>
+  </div>
+  <div class="clear"></div>
+</nav>

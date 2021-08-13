@@ -1,0 +1,753 @@
+<?php 
+if ($wo['loggedin'] == false) {
+   header("Location: " . $wo['config']['site_url']);
+   exit();
+}
+$is_admin = Wo_IsAdmin();
+$is_moderoter = Wo_IsModerator();
+if ($is_admin === false && $is_moderoter === false) {
+    header("Location: " . $wo['config']['site_url']);
+    exit();
+}
+$page        = 'dashboard';
+$open_ul     = 'dashboard';
+$pages_array = array(
+   'dashboard',
+   'general_setting',
+   'site_setting',
+   'social_login',
+   'manage_users',
+   'online_users',
+   'pro_users',
+   'manage_pages',
+   'manage_posts',
+   'manage_groups',
+   'manage_reports',
+   'verifications_requests',
+   'themes',
+   'announcement',
+   'banned_ip',
+   'ads',
+   'mailing_list',
+   'cache',
+   'games',
+   'design',
+   'terms',
+   'email_setting',
+   'sms_setting',
+   'pro_setting',
+   'video_settings',
+   'payments',
+   'backup',
+   'sitemap',
+   'windows_app',
+   'custom_fields',
+   'add_new_field',
+   'custom_pages',
+   'edit_field',
+   'ios_app',
+   'add_new_page',
+   'send_notification',
+   'edit_page',
+   'affiliates',
+   'referrals',
+   'affiliates_settings',
+   's3',
+   'languages',
+   'edit_lang',
+   'edit_key',
+   'add_new_lang',
+   'add_new_lang_key',
+   'updates',
+   'blogs',
+   'forum',
+   'push',
+   'events',
+   'movies',
+   'invitations',
+   'user_ads',
+   'status'
+);
+$moderator_pages_array = array(
+   'dashboard',
+   'manage_users',
+   'online_users',
+   'manage_pages',
+   'manage_posts',
+   'manage_groups',
+   'manage_reports',
+   'ads',
+   'cache',
+   'games',
+   'terms',
+);
+$hr_keys = array(
+   'video_settings',
+   'languages',
+   'pro_users',
+   'affiliates',
+   'games',
+   'send_notification',
+   'ads',
+   'push',
+   'themes',
+   'sitemap',
+);
+
+
+
+$settings    = array(
+    'dashboard' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=dashboard'),
+        'name' => $wo['lang']['dashboard'],
+        'icon' => 'bar-chart',
+        'ajax_url' => '?link1=admincp&page=dashboard'
+    ),
+    'general_setting' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=general_setting'),
+        'name' => $wo['lang']['general_setting'],
+        'icon' => 'cog',
+        'ajax_url' => '?link1=admincp&page=general_setting'
+    ),
+    'site_setting' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=site_setting'),
+        'name' => $wo['lang']['site_setting'],
+        'icon' => 'wrench',
+        'ajax_url' => '?link1=admincp&page=site_setting'
+    ),
+    'email_setting' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=email_setting'),
+        'name' => $wo['lang']['email_setting'],
+        'icon' => 'envelope-o',
+        'ajax_url' => '?link1=admincp&page=email_setting'
+    ),
+    'sms_setting' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=sms_setting'),
+        'name' => $wo['lang']['sms_setting'],
+        'icon' => 'envelope-o',
+        'ajax_url' => '?link1=admincp&page=sms_setting'
+    ),
+    'social_login' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=social_login'),
+        'name' => $wo['lang']['social_login'],
+        'icon' => 'share-square',
+        'ajax_url' => '?link1=admincp&page=social_login'
+    ),
+    'video_settings' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=video_settings'),
+        'name' => 'Video & Audio settings',
+        'icon' => 'microphone',
+        'ajax_url' => '?link1=admincp&page=video_settings'
+    ),
+
+);
+$languages   = array(
+    'languages' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=languages'),
+        'name' => 'Manege & Edit',
+        'icon' => 'language',
+        'ajax_url' => '?link1=admincp&page=languages'
+    )
+);
+
+$pro_mode    = array(
+    'pro_setting' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=pro_setting'),
+        'name' => 'Pro Setting',
+        'icon' => 'fire',
+        'ajax_url' => '?link1=admincp&page=pro_setting'
+    ),
+    'payments' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=payments'),
+        'name' => 'Payments',
+        'icon' => 'money',
+        'ajax_url' => '?link1=admincp&page=payments'
+    ),
+    'pro_users' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=pro_users'),
+        'name' => 'Pro Members',
+        'icon' => 'bolt',
+        'ajax_url' => '?link1=admincp&page=pro_users'
+    )
+);
+
+$affiliates  = array(
+    'affiliates_settings' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=affiliates_settings'),
+        'name' => 'Affiliates settings',
+        'icon' => 'users',
+        'ajax_url' => '?link1=admincp&page=affiliates_settings'
+    ),   
+    'affiliates' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=affiliates'),
+        'name' => 'Payment requests',
+        'icon' => 'usd',
+        'ajax_url' => '?link1=admincp&page=affiliates'
+    ),
+);
+
+
+$custom_pages = array(
+    'custom_fields' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=custom_fields'),
+        'name' => 'Profile Fields',
+        'icon' => 'bars',
+        'ajax_url' => '?link1=admincp&page=custom_fields'
+    ),
+    'custom_pages' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=custom_pages'),
+        'name' => 'Custom pages',
+        'icon' => 'bars',
+        'ajax_url' => '?link1=admincp&page=custom_pages'
+    ),
+);
+
+$common      = array(
+    'manage_users' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=manage_users'),
+        'name' => $wo['lang']['users'],
+        'icon' => 'user',
+        'color' => 'users',
+        'ajax_url' => '?link1=admincp&page=manage_users'
+    ),
+    'manage_pages' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=manage_pages'),
+        'name' => $wo['lang']['pages'],
+        'icon' => 'flag',
+        'color' => 'pages',
+        'ajax_url' => '?link1=admincp&page=manage_pages'
+    ),
+    'manage_posts' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=manage_posts'),
+        'name' => 'Posts',
+        'icon' => 'pencil',
+        'color' => 'posts',
+        'ajax_url' => '?link1=admincp&page=manage_posts'
+    ),
+    'manage_groups' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=manage_groups'),
+        'name' => $wo['lang']['groups'],
+        'icon' => 'users',
+        'color' => 'groups',
+        'ajax_url' => '?link1=admincp&page=manage_groups'
+    ),
+    'blogs' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=blogs'),
+        'name' => 'Blogs',
+        'icon' => 'book',
+        'ajax_url' => '?link1=admincp&page=blogs'
+    ),
+    'forum' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=forum'),
+        'name' => 'Forum',
+        'icon' => 'comments',
+        'ajax_url' => '?link1=admincp&page=forum'
+    ),
+    'events' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=events'),
+        'name' => 'Events',
+        'icon' => 'comments',
+        'ajax_url' => '?link1=admincp&page=events'
+    ),
+    'movies' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=movies'),
+        'name' => 'Movies',
+        'icon' => 'film',
+        'ajax_url' => '?link1=admincp&page=movies'
+    ),
+    'games' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=games'),
+        'name' => $wo['lang']['games'],
+        'icon' => 'gamepad',
+        'ajax_url' => '?link1=admincp&page=games'
+    ),
+    'status' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=status'),
+        'name' => 'Stories / Status',
+        'icon' => 'story',
+        'ajax_url' => '?link1=admincp&page=status'
+    )
+);
+
+$announ_mile = array(
+    'announcement' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=announcement'),
+        'name' => $wo['lang']['announcement'],
+        'icon' => 'bullhorn',
+        'ajax_url' => '?link1=admincp&page=announcement'
+    ),
+    'mailing_list' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=mailing_list'),
+        'name' => $wo['lang']['mailing_users'],
+        'icon' => 'envelope-o',
+        'ajax_url' => '?link1=admincp&page=mailing_list'
+    ),
+    'send_notification' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=send_notification'),
+        'name' => 'Mass Notifications',
+        'icon' => 'flag',
+        'color' => 'pages',
+        'ajax_url' => '?link1=admincp&page=send_notification'
+    )
+);
+
+$manage_ads  = array(
+    'ads' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=ads'),
+        'name' => "Manage Admin Ads",
+        'icon' => 'usd',
+        'ajax_url' => '?link1=admincp&page=ads'
+    ),
+    'user_ads' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=user_ads'),
+        'name' => "Manage User Ads",
+        'icon' => 'usd',
+        'ajax_url' => '?link1=admincp&page=user_ads'
+    ),
+);
+
+
+
+$mobile_stg  = array(
+    'windows_app' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=windows_app'),
+        'name' => 'Messengers & Native Apps',
+        'icon' => 'connectdevelop',
+        'ajax_url' => '?link1=admincp&page=windows_app'
+    ),
+    'push' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=push'),
+        'name' => 'Push Notifications System',
+        'icon' => 'connectdevelop',
+        'ajax_url' => '?link1=admincp&page=push'
+    ),
+);
+
+$des_themes  = array(
+    'design' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=design'),
+        'name' => $wo['lang']['design'],
+        'icon' => 'paint-brush',
+        'ajax_url' => '?link1=admincp&page=design'
+    ),
+    'themes' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=themes'),
+        'name' => $wo['lang']['themes'],
+        'icon' => 'desktop',
+        'ajax_url' => '?link1=admincp&page=themes'
+    )
+);
+
+$more_stgs   = array(
+    'manage_reports' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=manage_reports'),
+        'name' => $wo['lang']['reports'],
+        'icon' => 'exclamation-triangle',
+        'ajax_url' => '?link1=admincp&page=manage_reports'
+    ),
+    'verifications_requests' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=verifications_requests'),
+        'name' => $wo['lang']['verifications_requests'],
+        'icon' => 'check-circle',
+        'ajax_url' => '?link1=admincp&page=verifications_requests'
+    ),
+    'terms' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=terms'),
+        'name' => $wo['lang']['terms'],
+        'icon' => 'bars',
+        'ajax_url' => ''
+    ),
+    'banned_ip' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=banned_ip'),
+        'name' => $wo['lang']['ban_user'],
+        'icon' => 'user-times',
+        'ajax_url' => '?link1=admincp&page=banned_ip'
+    ),
+    'sitemap' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=sitemap'),
+        'name' => 'Site map',
+        'icon' => 'map',
+        'ajax_url' => '?link1=admincp&page=sitemap'
+    ),
+    'invitations' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=invitations'),
+        'name' => 'Invitations',
+        'icon' => 'film',
+        'ajax_url' => '?link1=admincp&page=invitations'
+    )
+);
+
+
+$backup      = array(
+    'backup' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=backup'),
+        'name' => 'Backups',
+        'icon' => 'download',
+        'ajax_url' => '?link1=admincp&page=backup'
+    )
+);
+
+$site_update = array(
+    'updates' => array(
+        'url' => Wo_SeoLink('index.php?link1=admincp&page=updates'),
+        'name' => 'Updates & Bug Fixes',
+        'icon' => 'download',
+        'ajax_url' => '?link1=admincp&page=updates'
+    )   
+);
+
+$panel_sections = array(
+  $settings,
+  $languages,
+  $pro_mode,
+  $affiliates,
+  $custom_pages,
+  $common,
+  $announ_mile,
+  $manage_ads,
+  $mobile_stg,
+  $des_themes,
+  $more_stgs,
+  $des_themes,
+  $backup,
+  $site_update
+);
+
+if ($is_moderoter === true) {
+  $list_array = $moderator_pages_array;
+} else if ($is_admin === true) {
+  $list_array = $pages_array;
+}
+if (!empty($_GET['page'])) {
+   if (in_array($_GET['page'], $list_array)) {
+      $page = $_GET['page'];
+   }
+}
+if ($page == 'dashboard') {
+   Wo_GetOfflineTyping();
+   //Wo_UpdateProMembers();
+}
+foreach ($panel_sections as $set_array) {
+  if (in_array($page, array_keys($set_array)) && $page != 'dashboard'){
+    $panel_tabs = array_keys($set_array);
+    $open_ul    = $panel_tabs[0];
+    break;
+  }
+}
+
+?>
+<div class="page-margin">
+  <?php if (is_dir('install')) { ?>
+  <div class="alert alert-danger">
+    <i class="fa fa-fw fa-exclamation-triangle"></i> <strong>Risk:</strong>Please delete the ./install folder for security reasons.
+  </div>
+  <?php } ?>
+  <?php 
+  $warnings = Wo_GetScriptWarnings();
+  if (!empty($warnings)) {
+     foreach ($warnings as $key => $value1) { ?>
+       <div class="alert alert-warning">
+          <i class="fa fa-fw fa-exclamation-circle"></i>
+          <?php 
+          if ($key == "STRICT_TRANS_TABLES") {
+            echo "<strong>Warning:</strong>The sql-mode <b>STRICT_TRANS_TABLES</b>is enabled in your mysql server, please contact your host provider to disable it.";
+          }
+          if ($key == "STRICT_ALL_TABLES") {
+            echo "<strong>Warning:</strong>The sql-mode <b>STRICT_ALL_TABLES</b>is enabled in your mysql server, please contact your host provider to disable it.";
+          }
+          if ($key == "safe_mode") {
+            echo "<strong>Warning:</strong>The php-mode <b>safe_mode</b>is enabled in your server, please contact your host provider to disable it.";
+          }
+          if ($key == "allow_url_fopen") {
+            echo "<strong>Warning:</strong>The php-extension <b>allow_url_fopen</b>is disabled in your server, please contact your host provider to enable it.";
+          }
+          if ($key == 'update_file') {
+            echo "<strong>Important:</strong>The file <b>update.php</b>is uploaded and not run yet, <a href='" . $wo['config']['site_url']. "/update.php'>Click Here</a> to update the script to v" . $wo['script_version'];
+          }
+          ?>
+       </div>
+     <?php }
+  }
+  ?>
+
+   <div class="row admin-panel">
+      <div class="col-md-3">
+         <!-- settings -->
+          <?php
+           echo '<p class="colloape-panel-stg pointer" data-collapse="dashboard">
+                 <i class="fa fa-cogs" aria-hidden="true"></i>
+                 Settings <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="dashboard">';
+           foreach ($settings as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- languages -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="languages">
+                 <i class="fa fa-language" aria-hidden="true"></i> 
+                 Languages <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="languages">';
+           foreach ($languages as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+              
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- pro mode -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="pro_setting">
+                 <i class="fa fa-star-o" aria-hidden="true"></i> 
+                 Pro Mode <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="pro_setting">';
+           foreach ($pro_mode as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                  
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- affiliates -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="affiliates_settings">
+                <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                 Affiliates <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="affiliates_settings">';
+           foreach ($affiliates as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                  
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- custom_ages -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="custom_fields">
+                 <i class="fa fa-random" aria-hidden="true"></i> 
+                 Custom Pages & Fields <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="custom_fields">';
+           foreach ($custom_pages as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- $common -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="manage_users">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                 Manage <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="manage_users">';
+           foreach ($common as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- $announ_mile -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="announcement">
+                <i class="fa fa-bullhorn" aria-hidden="true"></i>     
+                 Announcment & Mailing <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="announcement">';
+           foreach ($announ_mile as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+          
+          <!-- $manage_ads -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="ads">
+                 <i class="fa fa-buysellads" aria-hidden="true"></i>                       
+                 Advertisements <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="ads">';
+           foreach ($manage_ads as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+          
+          <!-- $mobile_stg -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="windows_app">
+                 <i class="fa fa-mobile" aria-hidden="true"></i>                         
+                 Mobile Settings <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="windows_app">';
+           foreach ($mobile_stg as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- $des_themes -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="design">
+                 <i class="fa fa-paint-brush" aria-hidden="true"></i>    
+                 Design & Themes <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="design">';
+           foreach ($des_themes as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+          
+          <!-- $more_stgs -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="manage_reports">
+                 <i class="fa fa-sliders" aria-hidden="true"></i>
+                 More Settings <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="manage_reports">';
+           foreach ($more_stgs as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    <?php
+                    if ($key == 'manage_reports') {
+                      $reports = Wo_CountUnseenReports();
+                       if ($reports > 0) { ?>
+                          <div class="report-not-seen <?php echo Wo_RightToLeft('pull-right');?>"><?php echo $reports;?></div>
+                    <?php } 
+                    } else if ($key == 'verifications_requests') {
+                      $reports = Wo_CountUnseenVerifications();
+                       if ($reports > 0) { ?>
+                    <div class="report-not-seen <?php echo Wo_RightToLeft('pull-right');?>"><?php echo $reports;?></div>
+                    <?php } 
+                    }
+                    ?>
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+
+          <!-- backup -->
+    
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="backup">
+                 <i class="fa fa-hdd-o" aria-hidden="true"></i>    
+                 Site Backups <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="backup">';
+           foreach ($backup as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+          <!-- site_update -->
+          <?php
+            echo '<p class="colloape-panel-stg pointer" data-collapse="updates">
+                 <i class="fa fa-refresh" aria-hidden="true"></i>                                
+                 Updates <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+                 </p>';
+           echo '<ul class="list-group  filterby settings-by nodisplay" id="updates">';
+           foreach ($site_update as $key => $page_) { 
+            if (in_array($key, $list_array)) {
+            ?>
+           <li class="list-group-item padding-15 filter-by-li <?php echo (isset($page_['color']) && !empty($page_['color'])) ? $page_['color']: '';?> <?php echo ($page == $key) ? 'avtive': '';?>">
+                 <a href="<?php echo $page_['url']?>" <?php echo ($key != 'terms' && $key != 'social_login' && $key != 'mailing_list') ? 'data-ajax="' . $page_['ajax_url'] . '"':''?>>
+                    <?php echo $page_['name'];?>
+                    
+                 </a>
+           </li>
+          <?php } } echo "</ul>";?>
+            <hr>
+            <ul class="list-group  filterby settings-by">  
+              <li class="list-group-item padding-15 colloape-panel-stg filter-by-li">
+                <i class="fa fa-fw fa-copyright"></i> Build v<?php echo $wo['script_version'];?>
+              </li> 
+            </ul>
+
+      </div>
+      <div class="col-md-9">
+         <?php echo Wo_LoadPage("admin/{$page}/content"); ?>
+      </div>
+   </div>
+</div>
+
+<script>
+  jQuery(document).ready(function($) {
+    $("ul#<?php echo $open_ul; ?>").slideDown('fast');
+    $("p[data-collapse='<?php echo $open_ul; ?>']").find('i.fa-caret-down').addClass('rotate-90d');
+    if ('<?php echo $page; ?>' == 'dashboard') {
+      $('p[data-collapse="dashboard"]').find('i.fa-caret-down').addClass('rotate-90d');
+    }
+    
+    $('.colloape-panel-stg').click(function(event) {
+      var self = $(this);
+      self.find('i.fa-caret-down').toggleClass('rotate-90d');
+      $('ul#'+self.attr('data-collapse')).slideToggle('fast');
+      $('.admin-panel ul.filterby').each(function(index, el) {
+        if ($(el).attr('id') != self.attr('data-collapse')) {
+          $(el).slideUp('fast');
+          $("p[data-collapse='"+$(el).attr('id')+"']").find('i.fa-caret-down').removeClass('rotate-90d');
+        }
+      });
+    });
+  });
+</script>

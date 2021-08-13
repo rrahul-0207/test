@@ -1,0 +1,20 @@
+[31-Jul-2018 08:34:36 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/webdev/public_html/autocomplete/sportsTeams.php on line 6
+[31-Jul-2018 08:47:52 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:47:52 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:47:52 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:49:26 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:49:26 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:49:26 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:54:01 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:54:01 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:54:01 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 33
+[31-Jul-2018 08:58:12 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/webdev/public_html/autocomplete/sportsTeams.php on line 6
+[31-Jul-2018 09:12:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:12:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:12:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:13:16 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:13:16 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:13:16 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:14:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:14:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35
+[31-Jul-2018 09:14:07 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/webdev/public_html/autocomplete/sportsTeams.php on line 35

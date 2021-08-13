@@ -1,0 +1,232 @@
+<div class="container-fluid">
+            <!-- Changelogs -->
+            <div class="block-header">
+                <h2>REWARDS &gt; REQUESTS<small></small></h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col">
+                    <div id="requests" class="container-fluid">
+
+                    </div>
+                </div>
+            </div>
+</div>
+
+<script type="application/javascript">
+
+    var page = 0;
+    var pageSize = 50;
+
+    function load(start, count) {
+        $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_load_requests', {
+            method: 'POST',
+            data: {
+                start: page * pageSize,
+                count: pageSize
+            },
+            success: (res, status, xhr) => {
+                $('#requests').empty();
+
+                if (!res ||!res.status || res.status != 'success')
+                    return;
+
+                if (!res.data || !res.data.items || !Array.isArray(res.data.items))
+                    return;
+
+                if (res.data.items.length == 0) {
+                    $('<div></div>', {
+                        'class': 'row'
+                    }).append($('<div></div>', {
+                        'class': 'col'
+                    }).html('<h5 class="text-center">Nothing here for now</h5>'))
+                    .appendTo('#requests');
+                    return;
+                }
+
+                let pagination = $('<div></div>', {
+                    'class': 'col pagination float-right'
+                });
+                let lastPage = Math.floor(res.data.total_count / pageSize);
+                if (res.data.items.length == 1) {
+                    let position = page * pageSize + 1;
+                    $('<span></span>', {
+                        'class': 'p-3 m-3'
+                    }).html(position + ' of ' + position + '&nbsp;&nbsp;').appendTo(pagination);
+                } else {
+                    let start = page * pageSize + 1;
+                    let end = start + res.data.items.length - 1;
+                    $('<span></span>', {
+                        'class': 'm-3 p-3'
+                    }).html(start + ' to ' + end  + ' of ' + res.data.total_count + '&nbsp;&nbsp;').appendTo(pagination);
+                }
+                $('<button></button>', {
+                    'type': 'button',
+                    'class': 'btn btn-sm btn-secondary btn-previous waves-effect',
+                    'disabled': (page == 0)
+                }).html('&lt; Previous').appendTo(pagination);
+                $('<button></button>', {
+                    'type': 'button',
+                    'class': 'btn btn-sm btn-secondary btn-next waves-effect',
+                    'disabled': (page == lastPage)
+                }).html('Next &gt;').appendTo(pagination);
+
+                $('<div></div>', {
+                    'class': 'row'
+                }).append(pagination).appendTo('#requests');
+
+                $('<div class="row header-row bg-primary"><div class="col-sm-4">Name</div><div class="col-sm-4">Balance</div><div class="col-sm-4"></div></div>').appendTo('#requests');
+
+//                for (let i = 0; i < 13; i++)
+                res.data.items.forEach(request => {
+                    console.log(request);
+                    let row = $('<div></div>', {
+                        'class': 'row data-row',
+                        'id': request.id,
+                        'data-id': request.id
+                    });
+
+                    $('<div></div>', { 'class': 'col-sm-4'})
+                        .html(request.first_name + ' ' + request.last_name)
+                        .appendTo(row);
+
+                    $('<div></div>', { 'class': 'col-sm-4'})
+                        .html(request.balance)
+                        .appendTo(row);
+
+                    $('<div></div>', { 'class': 'col-sm-4'})
+                        .append($('<button></button>', {
+                            'type': 'button',
+                            'class': 'btn btn-sm btn-primary waves-effect accept',
+                            'id': request.id
+                        }).html('Confirm'))
+                        .append($('<button></button>', {
+                            'type': 'button',
+                            'class': 'btn btn-sm btn-secondary waves-effect reject',
+                            'id': request.id
+                        }).html('Reject'))
+//                        .append($('<span class="spinner-border spinner-border-sm" role="status"><span></span></span>'))
+                        .appendTo(row);
+
+                    row.appendTo('#requests');
+                });
+
+                $('<div></div>', {
+                    'class': 'row row-header bg-primary',
+                    'style': 'height: .4em;'
+                }).appendTo('#requests');
+
+                $('<div></div>', {
+                    'class': 'row'
+                }).append(pagination.clone()).appendTo('#requests');
+            },
+            error: (xhr, status, error) => {
+
+            }
+        });
+    }
+
+    function reject(e) {
+        let $this = $(this);
+        let id = $this.attr('id');
+        let row = $('.row#' + id);
+        let buttons = row.find('button');
+        buttons.attr('disabled', true);
+        row.addClass('loading');
+
+        $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_request_reject', {
+            method: 'POST',
+            data: {
+                id: id
+            },
+            success: (res, status, xhr) => {
+                if (res && res.status && res.status == 'success') {
+                    row.remove();
+                    return;
+                }
+
+                buttons.attr('disabled', false);
+                row.removeClass('loading');
+            },
+            error: (xhr, status, error) => {
+                buttons.attr('disabled', false);
+                row.removeClass('loading');
+            }
+        });
+    }
+
+    function confirm(e) {
+        let $this = $(this);
+        let id = $this.attr('id');
+        let row = $('.row#' + id);
+        let buttons = row.find('button');
+        buttons.attr('disabled', true);
+        row.addClass('loading');
+
+        $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_request_accept', {
+            method: 'POST',
+            data: {
+                id: id
+            },
+            success: (res, status, xhr) => {
+                if (res && res.status && res.status == 'success') {
+                    row.remove();
+                    return;
+                }
+
+                buttons.attr('disabled', false);
+                row.removeClass('loading');
+            },
+            error: (xhr, status, error) => {
+                buttons.attr('disabled', false);
+                row.removeClass('loading');
+            }
+        });
+    }
+
+    function previous() {
+        if (page < 1)
+            return;
+        page--;
+        load();
+    }
+    
+    function next() {
+        page++;
+        load();
+    }
+
+    $(function() {
+        $('#requests').on('click', 'button.reject', reject);
+        $('#requests').on('click', 'button.accept', confirm);
+        $('#requests').on('click', 'button.btn-previous', previous);
+        $('#requests').on('click', 'button.btn-next', next);
+        load();
+    });
+</script>
+
+<style>
+    #requests .row.data-row:nth-child(2n+2) {
+        background-color: #cccfff;
+    }
+    #requests .row.data-row:nth-child(2n+3) {
+        background-color: #eeefff;
+    }
+    #requests .row.data-row:last-child {
+        border-bottom: 3px solid;
+    }
+
+    #requests .row.data-row div {
+        padding: 12px;
+    }
+
+    #requests .row.header-row div {
+        padding: 12px;
+    }
+
+    .row .spinner-border {
+        display: none;
+    }
+    .row.loading .spinner-border {
+        display: inline;
+    }
+</style>

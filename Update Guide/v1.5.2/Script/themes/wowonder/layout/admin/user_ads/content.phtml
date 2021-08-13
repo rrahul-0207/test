@@ -1,0 +1,82 @@
+<div class="list-group">
+   <div class="list-group-item">
+    <i class="fa fa-buysellads" aria-hidden="true"></i> Advertising
+   </div>
+   <div class="setting-well">
+      <div class="clear"></div>
+      <table class="table table-striped table-bordered dataTable">
+         <thead>
+            <tr>
+               <th><?php echo $wo['lang']['id'];?></th>
+               <th><?php echo $wo['lang']['website'];?></th>
+               <th><?php echo $wo['lang']['user'];?></th>
+               <th><?php echo $wo['lang']['time'];?></th>
+               <th><?php echo $wo['lang']['action'];?></th>
+            </tr>
+         </thead>
+         <tbody class="page-result manage-pages-list" id="user-ads">
+               <?php 
+                $user_ads = Wo_GetAds();
+                if ($user_ads && count($user_ads) > 0) {
+                    foreach ($user_ads as $wo['user_ad']) {
+                      echo Wo_LoadPage('admin/user_ads/ads-list');
+                    }
+                }
+               ?>
+         </tbody>
+      </table>
+      <span class="center-text"></span>
+   </div>
+</div>
+<div class="modal fade" id="delete-ad" >
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-exclamation-circle"></i> <?php echo $wo['lang']['delete_ad']; ?></h4>
+         </div>
+         <div class="modal-body">
+            <p><?php echo $wo['lang']['confirm_delete_ad']; ?></p>
+         </div>
+         <div class="modal-footer">
+            <button  type="button" onclick="Wo_DeleteAd($('#delete-ad').attr('data-ad-id'))" class="btn  btn-main"><i class="fa fa-trash-o progress-icon" data-icon="trash-o"></i> <?php echo $wo['lang']['delete']; ?></button>
+            <button  type="button" class="btn btn-default" data-dismiss="modal"><?php echo $wo['lang']['cancel']; ?></button>
+         </div>
+      </div>
+   </div>
+</div>
+<script>
+$(function () {
+  $('table').DataTable({"aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 4 ] }
+    ],
+   "order": [[ 0, "desc" ]]});
+});
+jQuery(document).ready(function($) {
+  $(document).on('click', '.delete-ad', function(event) {
+    var self = $(this); 
+    $("#delete-ad").attr('data-ad-id',self.attr('id')).modal("show");
+
+  });
+});
+function Wo_DeleteAd(id){
+  if (id && id > 0) {
+    $.ajax({
+      url: Wo_Ajax_Requests_File(),
+      type: 'GET',
+      dataType: 'json',
+      data: {f: 'wallet',s:'remove',id:id},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        $("tr[data-userad-id="+id+"]").slideUp(function(){
+          $(this).remove();
+        })
+        $("#delete-ad").modal("hide");
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+  }
+}
+</script>

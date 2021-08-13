@@ -1,0 +1,114 @@
+<div class="page-margin">
+   <div class="row">
+      <div class="col-md-2"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+      <div class="col-md-7">
+         <div class="list-group">
+            <div class="list-group-item">
+               <i class="fa fa-plus-square-o"></i> 
+                <?php echo $wo['lang']['create_new_status'] ?>
+               <div class="clear"></div>
+            </div>
+            <div class="setting-well">
+               <form class="create-user-story form-horizontal" method="post">
+                  <fieldset>
+                     <div class="create-status-alert hidden">
+                        <div class="alert alert-danger">
+                           <p><?php echo $wo['lang']['max_number_status'] ?></p>
+                        </div>
+                     </div>
+                     <!-- Text input-->
+                     <div class="form-group">
+                        <label class="col-md-3 optional-field" for="group_name"><?php echo $wo['lang']['title'];?> *</label>  
+                        <div class="col-md-6">
+                           <input name="title" type="text" class="form-control input-md">
+                        </div>
+                     </div>
+                     <div class="form-group">
+                     	<label class="col-md-3" for="group_name"><?php echo $wo['lang']['select'];?> *</label>
+      						<div class="col-md-6"  title="Select media">
+      							<div id="select-status-media">
+      								<p class="img">			
+      									<i class="fa fa-picture-o" aria-hidden="true"></i>
+      									<?php echo $wo['lang']['select']; ?>
+      									<?php echo $wo['lang']['photos']; ?> &amp; <?php echo $wo['lang']['videos']; ?>
+      								</p>
+      							</div>
+
+      						</div>
+                     </div>
+                     <div class="form-group hidden" id="user-story-total">
+                        <label class="col-md-3"></label>  
+                        <div class="col-md-6">
+                           <input type="text" class="form-control input-md" readonly>
+                        </div>
+                     </div>
+
+
+                     <div class="form-group">
+                        <label class="col-md-3 optional-field" for="about"><?php echo $wo['lang']['about'];?> *</label>  
+                        <div class="col-md-6">
+                           <textarea name="description" id="" rows="3" class="form-control input-md"></textarea>
+                        </div>
+                     </div>
+                     <hr>
+                     <div class="form-group last-btn">
+                        <label class="col-md-3"></label>
+                        <div class="col-sm-3">
+                           <button type="submit" class="form-control btn btn-main">
+                           <i class="fa fa-plus-square progress-icon" data-icon="plus-square"></i> <?php echo $wo['lang']['create'];?>
+                           </button>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <input type="file" name="statusMedia[]" class="hidden" id="user-storymedia" multiple="multiple">
+               </form>
+            </div>
+         </div>
+      </div>
+      <!-- .col-md-8 -->
+      <?php echo Wo_LoadPage('sidebar/content');?>
+   </div>
+   <!-- .row -->
+</div>
+
+<script>
+   jQuery(document).ready(function($) {
+      $("#user-storymedia").change(function () {
+        var numFiles = this.files.length;
+        if (numFiles > 20) {
+         $("#user-storymedia").val('');
+         $(".create-status-alert").removeClass('hidden');
+        }
+        else{
+            $("#user-story-total input").val(numFiles + ' file(s) selected');
+            $("#user-story-total").removeClass('hidden').slideDown(200);
+        }
+
+      });
+
+      $("#select-status-media").click(function(event) {
+         $("#user-storymedia").click();
+      });
+
+      $('.create-user-story').ajaxForm({
+       url: Wo_Ajax_Requests_File() + '?f=status&s=new',
+       type:"POST",
+       beforeSend: function() {
+        Wo_progressIconLoader($('.create-user-story').find('button.btn-main'));
+       },
+       success: function(data) {
+        scrollToTop();
+        if (data['status'] == 200) {
+          $(".create-status-alert").removeClass('hidden').html('<div class="alert alert-success">'+ data['message'] +'</div>');
+          window.location = '<?php echo $wo['config']['site_url']; ?>';
+        } 
+
+        else if (data['message']) {
+          $(".create-status-alert").removeClass('hidden').html('<div class="alert alert-danger">' + data['message'] + '</div>');
+        } 
+
+        Wo_progressIconLoader($('.create-user-story').find('button.btn-main'));
+      }});
+
+   });
+</script>

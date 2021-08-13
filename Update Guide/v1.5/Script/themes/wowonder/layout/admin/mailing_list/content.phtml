@@ -1,0 +1,117 @@
+ <div class="list-group">
+   <div class="list-group-item"><i class="fa fa-fw fa-envelope-o"></i> <?php echo $wo['lang']['mailing_users']; ?></div>
+   <div class="setting-well">
+   <form method="post" action="" class="setting-mailnglist-container">
+            <h5><?php echo $wo['lang']['new_email'];?> <small>(<?php echo $wo['lang']['html_allowed'];?>)</small></h5>
+            <div class="send-errors"></div>
+            <div class="form-group">
+               <input name="subject" type="text" class="form-control" placeholder="<?php echo $wo['lang']['mailing_subject'];?>">
+            </div>
+            <div class="form-group">
+               <textarea name="message" class="form-control" placeholder="<?php echo $wo['lang']['mailing_message'];?>" rows="10" cols="20"></textarea>
+            </div>
+            <div class="form-group">
+            <label id="mailing-selected-users">Search: <span></span></label>
+               <input type="text" class="form-control" value="" placeholder="User name.." onkeydown="Wo_SearchMailingUsers(this.value)">
+               <div class="search-mailing-users hidden">
+               </div>                                
+            </div>
+
+            <div class="form-group">
+            <label >Send to:</label>  
+            <div>
+               <select name="send_to" class="form-control">
+                  <option value="all">All users</option>
+                  <option value="active">Active users</option>
+                  <option value="inactive">Inactive users</option>
+               </select>
+            </div>
+            </div>
+            <div class="form-group">
+               <input type="checkbox" name="test_message"> <?php echo $wo['lang']['test_message'];?> <small>(Send to my email first)</small>
+            </div>
+            <div class="row">
+               <div class="col-sm-3 pull-left">
+                  <button type="submit" class="btn btn-main">
+                  <i class="fa fa-paper-plane-o progress-icon" data-icon="paper-plane-o"></i> <?php echo $wo['lang']['send'];?>
+                  </button>
+               </div>
+               <div class="setting-saved-update-alert milinglist"></div>
+            </div>
+            <input type="hidden" name="selected_emails" id="selected_emails">
+         </form>
+         </div>
+
+<style>
+   .search-mailing-users{
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 1px 0 0 #e3e4e8, 0 0 0 1px #f1f1f1;
+      padding:0;
+      margin-top:1px;
+   }
+   .search-mailing-users p{
+      width: 100%;
+      overflow: hidden;
+      padding: 5px 7px; 
+      cursor: pointer;
+   }
+   .search-mailing-users p:hover{
+      background: #f9f9f9;
+   }
+</style>
+<script>
+var mailing_users = [];
+$(function () {
+   $('form.setting-mailnglist-container').ajaxForm({
+      url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=send_mail_to_all_users',
+      beforeSend: function () {
+
+         Wo_progressIconLoader($('form.setting-mailnglist-container').find('button'));
+         $('.setting-saved-update-alert.milinglist').hide().fadeIn(200).html('<i class="fa fa-clock-o"></i><span id="loading"> Please wait <span>.</span><span>.</span><span>.</span></span>');
+         
+      },
+      success: function (data) {
+         if (data.status == 400) {
+            $('.send-errors').html('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + data.message + '</div>');
+            $('.setting-saved-update-alert.milinglist').fadeOut(200);
+         } else if (data.status == 200) {
+            $('.setting-saved-update-alert.milinglist').hide().fadeIn(200).html('<i class="fa fa-check"></i> Messges Sent').delay(2000).fadeOut(200);
+            $('.send-errors').empty();
+         }
+         Wo_progressIconLoader($('form.setting-mailnglist-container').find('button'));
+      }
+   });
+
+   $(document).on('click', '.search-mailing-users p', function(event) {
+      event.preventDefault();
+      var id = $(this).attr('data-user');
+      if ($.inArray(id, mailing_users) == -1) {
+         mailing_users.push(id);
+         $("#mailing-selected-users span").text(mailing_users.length);
+         $("#selected_emails").val(mailing_users.join());
+         $(this).remove();
+      }
+
+   });
+
+});
+
+function Wo_SearchMailingUsers(name = ''){
+   if (!name) { return false;}
+   $.ajax({
+      url: Wo_Ajax_Requests_File(),
+      type: 'GET',
+      dataType: 'json',
+      data: {f: 'admin_setting',s:'get_users_emails',name:name},
+   })
+   .done(function(data) {
+      if (data.status == 200) {
+         $('.search-mailing-users').removeClass('hidden').html(data.html);     
+      }
+   })
+   .fail(function() {
+      console.log("error");
+   })
+}
+</script>

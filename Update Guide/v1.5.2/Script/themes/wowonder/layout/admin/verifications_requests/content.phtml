@@ -1,0 +1,108 @@
+<?php 
+Wo_UpdateSeenVerifications();
+?>
+<div class="list-group setting-verification-container">
+   <div class="list-group-item"><i class="fa fa-fw fa-check-circle"></i> <?php echo $wo['lang']['verifications_requests']; ?></div>
+   <div class="setting-well">
+      <table class="table table-hover table-bordered table-striped table-stripped setting-table">
+         <thead>
+            <tr>
+               <th><?php echo $wo['lang']['id'];?></th>
+               <th><?php echo $wo['lang']['user'];?> </th>
+               <th><?php echo $wo['lang']['type'];?> </th>
+               <th><?php echo $wo['lang']['action'];?></th>
+            </tr>
+         </thead>
+         <tbody class="result">
+            <?php 
+               $reports = Wo_GetVerifications();
+               if (count($reports) > 0) {
+                 foreach ($reports as $wo['verification']) {
+                  echo Wo_LoadPage('admin/verifications_requests/verification-list');
+                 }
+               } 
+               ?>
+         </tbody>
+      </table>
+   </div>
+</div>
+<script>
+$(function () {
+  $('table').DataTable({
+   "order": [[ 0, "desc" ]]});
+});
+function Wo_DeleteVerification(id) {
+  var delete_icon = $('.setting-verification-container').find('#VerificationID_' + id).find('.delete-verification');
+  Wo_progressIconLoader(delete_icon);
+  $.get(Wo_Ajax_Requests_File(), {f:'admin_setting', s:'delete_verification', id:id}, function(data) {
+    if (data.status == 200) {
+      $('#review-verif-request-info-'+id).slideUp(function(){
+        $(this).remove();
+        $('#VerificationID_' + id).fadeOut(300, function() {
+          $(this).remove();
+        });
+      })
+    }
+  });
+}
+
+function Wo_Verify(id,verification_id,type) {
+  var verify_icon = $('.setting-verification-container').find('#VerificationID_' + verification_id).find('.verify');
+  Wo_progressIconLoader(verify_icon);
+  $.get(Wo_Ajax_Requests_File(), {f:'admin_setting', s:'verify_user', id:id, verification_id:verification_id, type:type}, function(data) {
+    if (data.status == 200) {
+      $('#review-verif-request-info-'+verification_id).slideUp(function(){
+        $(this).remove();
+      })
+      Wo_Delay(function(){
+        $('#VerificationID_' + verification_id).fadeOut(300, function() {
+          $(this).remove();
+        });
+      },1000);
+       
+    }
+  });
+}
+
+function Wo_ToggleVerfRequest(id,self){
+  if (!id || !self) {
+    return false;
+  }
+  $(self).find('i').toggleClass('rotate-90d');
+  $("#review-verif-request-info-"+id).slideToggle();
+
+}
+
+jQuery(document).ready(function($) {
+  $(document).on('click', '.toggle-verification-request', function(event) {
+    event.preventDefault();
+    $(this).find('i').toggleClass('rotate-90d');
+  });
+});
+</script>
+
+<style>
+  .review-verif-request-cont{
+    width: 100%;
+    overflow: hidden;
+    margin: 5px 0;
+  }
+  .review-verif-request-cont div{
+    width: 200px;
+    height: 150px;
+    float: left;
+    cursor: pointer;
+    margin: 0 5px 5px 0;
+  }
+
+  .review-verif-request-cont h4{
+    width: 100%;
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .toggle-verification-request{
+    padding: 3px 5px;
+  }
+</style>

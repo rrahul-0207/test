@@ -1,0 +1,282 @@
+<div class="page-margin">
+   <div class="row">
+      <div class="col-md-2"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+       <div class="col-md-7">
+           <div id="alert" class="alert alert-danger alert-dismissible" role="alert">
+
+           </div>
+           <div class="container-fluid">
+               <h4>Rewards</h4>
+               <div class="row">
+                   <div class="col">
+                       <div id="rewards" class="container-fluid">
+                           <h3></h3>
+                           <button type="button" class="btn btn-md btn-primary">
+                               <span></span>
+                           </button>
+                       </div>
+                   </div>
+               </div>
+               <div class="row">
+                   <div class="col">
+                       <div class="container-fluid">
+                           <div id="history" class="container-fluid" style="margin-top: 100px;">
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+      <?php echo Wo_LoadPage('sidebar/content');?>
+   </div>
+   <!-- .row -->
+</div>
+<!-- .page-margin -->
+
+<script type="application/javascript">
+
+    $(function() {
+
+        var button = $('#rewards button')
+        var msg = $('#rewards h3');
+        var a = $('#alert');
+
+        function alert(msg) {
+            a.html(msg).fadeIn().delay(2000).fadeOut();
+        }
+
+        function request() {
+            button.off('click');
+            button.attr('disabled', true);
+            $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_request', {
+                method: 'POST',
+                success: (data, status, xhr) => {
+                    button.attr('disabled', false);
+                    if (data && data.status && data.status == 'success') {
+                        button.find('span').html('Cancel withdraw');
+                        button.click(() => { cancel(); });
+                    } else if (data.error) {
+                        button.find('span').html('Request withdraw');
+                        button.click(() => { request(); });
+                        alert(data.error);
+                    }
+                },
+                error: (xhr, status, error) => {
+                    button.attr('disabled', false);
+                    alert(error);
+                }
+            });
+        }
+
+        function cancel() {
+            button.off('click');
+            button.attr('disabled', true);
+            $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_request_cancel', {
+                method: 'POST',
+                success: (data, status, xhr) => {
+                    button.attr('disabled', false);
+                    if (data && data.status && data.status == 'success') {
+                        button.find('span').html('Request withdraw');
+                        button.click(() => { request(); });
+                    } else if (data.error) {
+                        button.find('span').html('Cancel withdraw');
+                        button.click(() => { cancel(); });
+                        alert(data.error);
+                    }
+                },
+                error: (xhr, status, error) => {
+                    button.attr('disabled', false);
+                    alert(error);
+                }
+            });
+        }
+
+        function load() {
+            $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_load', {
+                method: 'POST',
+                success: (data, status, xhr) => {
+                    if (data && data.status && data.status == 'success') {
+                        let reward = data.data;
+                        if (reward.balance)
+                            msg.html('You have ' + reward.balance + ' points');
+                        if (reward.can_request) {
+                            button.find('span').html('Request withdraw');
+                            button.show();
+                            button.click(() => { request(); });
+                        } else if (reward.request_pending) {
+                            button.find('span').html('Cancel withdraw');
+                            button.show();
+                            button.click(() => { cancel(); });
+                        }
+                    }
+                },
+                error: (xhr, status, error) => {
+
+                }
+            });
+        }
+
+        load();
+
+    });
+
+    $(function() {
+        var page = 0;
+        var pageSize = 50;
+
+        function load(start, count) {
+            $.ajax(Wo_Ajax_Requests_File() + '?f=rewards_load_history', {
+                method: 'POST',
+                data: {
+                    start: page * pageSize,
+                    count: pageSize
+                },
+                success: (res, status, xhr) => {
+                    $('#history').empty();
+
+                    if (!res ||!res.status || res.status != 'success')
+                        return;
+
+                    if (!res.data || !res.data.items || !Array.isArray(res.data.items))
+                        return;
+
+                    $('<div></div>', {
+                       'class': 'row'
+                    }).html('<div class="col"><h4>History</h4></div>').appendTo('#history');
+
+                    if (res.data.items.length == 0) {
+                        $('<div></div>', {
+                            'class': 'row'
+                        }).append($('<div></div>', {
+                            'class': 'col'
+                        }).html('<h5 class="text-center">Nothing here for now</h5>'))
+                            .appendTo('#history');
+                        return;
+                    }
+
+                    let pagination = $('<div></div>', {
+                        'class': 'col pagination float-right'
+                    });
+                    let lastPage = Math.floor(res.data.total_count / pageSize);
+                    if (res.data.items.length == 1) {
+                        let position = page * pageSize + 1;
+                        $('<span></span>', {
+                            'class': 'p-3 m-3'
+                        }).html(position + ' of ' + position + '&nbsp;&nbsp;').appendTo(pagination);
+                    } else {
+                        let start = page * pageSize + 1;
+                        let end = start + res.data.items.length - 1;
+                        $('<span></span>', {
+                            'class': 'm-3 p-3'
+                        }).html(start + ' to ' + end  + ' of ' + res.data.total_count + '&nbsp;&nbsp;').appendTo(pagination);
+                    }
+                    $('<button></button>', {
+                        'type': 'button',
+                        'class': 'btn btn-sm btn-primary btn-previous waves-effect',
+                        'disabled': (page == 0)
+                    }).html('&lt; Previous').appendTo(pagination);
+                    $('<button></button>', {
+                        'type': 'button',
+                        'class': 'btn btn-sm btn-primary btn-next waves-effect',
+                        'disabled': (page == lastPage)
+                    }).html('Next &gt;').appendTo(pagination);
+
+                    $('<div></div>', {
+                        'class': 'row'
+                    }).append(pagination).appendTo('#history');
+
+                    $('<div class="row header-row"><div class="col-sm-4">Points</div><div class="col-sm-4">Date &amp; Time</div></div>').appendTo('#history');
+
+//                for (let i = 0; i < 13; i++)
+                    res.data.items.forEach(request => {
+                        console.log(request);
+                        let row = $('<div></div>', {
+                            'class': 'row data-row',
+                            'id': request.id,
+                            'data-id': request.id
+                        });
+
+                        $('<div></div>', { 'class': 'col-sm-4'})
+                            .html(request.value)
+                            .appendTo(row);
+
+                        var t = request.created.split(/[- :]/);
+                        var d = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+                        $('<div></div>', { 'class': 'col-sm-8'})
+                            .html(d.toUTCString())
+                            .appendTo(row);
+
+                        row.appendTo('#history');
+                    });
+
+                    $('<div></div>', {
+                        'class': 'row header-row',
+                        'style': 'height: .4em;'
+                    }).appendTo('#history');
+
+                    $('<div></div>', {
+                        'class': 'row'
+                    }).append(pagination.clone()).appendTo('#history');
+                },
+                error: (xhr, status, error) => {
+
+                }
+            });
+        }
+
+        function previous() {
+            if (page < 1)
+                return;
+            page--;
+            load();
+        }
+
+        function next() {
+            page++;
+            load();
+        }
+
+        $(function() {
+            $('#history').on('click', 'button.btn-previous', previous);
+            $('#history').on('click', 'button.btn-next', next);
+            load();
+        });
+
+    });
+
+</script>
+
+<style>
+    #rewards button {
+        min-width: 150px;
+        min-height: 2em;
+        display: none;
+    }
+
+    .alert {
+        display: none;
+    }
+
+    #history .header-row {
+        background-color: #aaaaaa;
+        font-weight: bold;
+    }
+    #history .row.data-row:nth-child(2n+2) {
+        background-color: #eeeeee;
+    }
+    #history .row.data-row:nth-child(2n+3) {
+        background-color: #cccccc;
+    }
+    #history .row.data-row:last-child {
+        border-bottom: 3px solid;
+    }
+
+    #history .row.data-row div {
+        padding: 12px;
+    }
+
+    #history .row.header-row div {
+        padding: 12px;
+    }
+
+</style>

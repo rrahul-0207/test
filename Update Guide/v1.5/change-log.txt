@@ -1,0 +1,45 @@
+1.5
+
+1. Added advertisement system. (Clicks, impressions)
+2. Added story system. (status, automatically gets removed after 24 hours). 
+3. Added new comment system for blogs and movies.
+4. Added group chat system.
+5. Added mass notification system in the admin panel.
+6. Added the ability to edit comment's replies.
+7. Added the ability to delete posts directly from home page (admins).
+8. Added the ability to delete any comment (admins).
+9. Added hide posts feature.
+10. Added 30+ more emojis.
+11. Added full verification form (ID, photo, description).
+12. Added new post sharing system.
+13. Added sitemap generator.
+14. Added registration invite system (Users can register just with invite link).
+15. Added new albums style (Collapsed).
+16. Added new admin panel sidebar (Collapsed).
+17. Added the ability to choose specific users in Mailing List.
+18. Added the ability to enable/disable ads system, story system.
+19. Added manage ads, stories (status) in the admin panel.
+20. Added "Who can see my friends" privacy option.
+21. Added multi date formats support.
+22. Added the ability to lose the verification if the username was changed.
+23. Added youtube/video link support for movies system.
+24. Added multi admins for groups and pages.
+25. Added gifs using "Giphy" API for messages/posts.
+26. Added API support for upcoming IOS application.
+27. Added Lightbox for images on messages, comments, and replies.
+28. Added page rate system, users can rate page from 0/5.
+29. Added report system for profiles, pages, and groups.
+30. Added new API for the new powerful windows desktop application.
+31. Added family members list (add a friend as a brother, father etc..)
+32. Added relationship assignment, e.g: Lisa is in a relationship with Zach
+33. Added find friends nearby (find friends near you within 100KM).
+34. Added alert feedback if file mime type/extension is not supported.
+35. Added alert if the file is larger than the max allowed size in publisher box, messages and chat.
+36. Upgraded Password hash system from MD5 to SHA1
+37. Changed the trending system to be updated weekly.
+38. Updated font-awesome library.
+39. Updated emojis library.
+40. Fixed bugs on API.
+41. Fixed major bugs in the script. (+30)
+42. Improved load speed.
+43. Fixed 2 security issues.

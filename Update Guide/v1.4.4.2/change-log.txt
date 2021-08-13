@@ -1,0 +1,3 @@
+﻿- Updated API for IOS messenger.
+- Fixed few bugs in the script.
+- Fixed few bugs in the API.

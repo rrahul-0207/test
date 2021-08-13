@@ -1,0 +1,11 @@
+<?php $friend=Wo_IsFollowing($wo['UsersList']['id'],$wo['user']['user_id']);
+if($friend == true):?>
+<div class="sidebar-user-data">
+   <div class="sidebar-listed-user-avatar">
+         <a href="<?php echo $wo['UsersList']['url'];?>">
+            <img src="<?php echo $wo['UsersList']['avatar']?>">
+            <div class="sidebar-listed-user-name"><?php echo $wo['UsersList']['user_name'];?></div>
+         </a>
+   </div>
+</div>
+<?php endif; ?>

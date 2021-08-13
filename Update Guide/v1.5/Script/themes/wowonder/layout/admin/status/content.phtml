@@ -1,0 +1,78 @@
+
+<div class="list-group">
+   <div class="list-group-item"><i class="fa fa-fw fa-book"></i> Stores</div>
+   <div class="setting-well">
+      <div class="clear"></div>
+      <table class="table  table-hover table-bordered table-condensed setting-table">
+         <thead>
+            <tr>
+               <th><?php echo $wo['lang']['id'];?></th>
+               <th>Expires</th>
+               <th>User</th>
+               <th><?php echo $wo['lang']['time'];?></th>
+               <th><?php echo $wo['lang']['action'];?></th>
+            </tr>
+         </thead>
+         <tbody class="page-result manage-pages-list" id="manage-user-stories">
+               <?php 
+               $wo_stories = Wo_GetAllStories();
+
+               if ($wo_stories && count($wo_stories) > 0) {
+                  foreach ($wo_stories as $wo['status']) {
+                     echo Wo_LoadPage('admin/status/status-list');
+                  }
+               }
+               else{
+                  echo "<tr><td colspan='5' class='text-center' style='padding:100px 0;'>No stories found</td></tr>";
+               }
+
+               ?>
+         </tbody>
+      </table>
+      <?php if (count($wo_stories) > 0): ?>
+        <div class="col-md-12 col-lg-12 col-sm-12 col-sx-12">
+          <div class="posts_load">
+              
+            <div class="load-more">
+              <button class="btn btn-default text-center pointer load-more-stories">
+              <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i>
+              <?php echo $wo['lang']['load_more'] ?>
+              </button>
+            </div>
+            <br>
+          </div>
+        </div>
+      <?php endif; ?>
+      
+      <span class="center-text"></span>
+   </div>
+</div>
+
+<script>
+   jQuery(document).ready(function($) {
+      $(".load-more-stories").click(function(event) {
+         var last_id = ($("tr[data-status-id]").length > 0) ? $("tr[data-status-id]").last().attr('data-status-id') : 0;
+         var self    = $(this);
+         $.ajax({
+           url: Wo_Ajax_Requests_File(),
+           type: 'GET',
+           dataType: 'json',
+           data: {f: 'status',s:'lm',offset:last_id},
+         })
+         .done(function(data) {
+           if (data.status == 200) {
+             $("#manage-user-stories").append(data.html);
+           }
+           else if(data.status == 404){
+             self.removeClass('load-more-ads').html(data.html);
+           }
+           else{
+             self.remove();
+           }
+         })
+         .fail(function() {
+           console.log("error");
+         })   
+      });
+   });
+</script>

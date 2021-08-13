@@ -1,0 +1,65 @@
+<nav class="navbar navbar-default ads-navbar-wrapper bg-main hidden-xs" role="navigation">
+  <div id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav ads-nav w100">
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=ads'); ?>"><i class="fa fa-buysellads" aria-hidden="true"></i>
+          &nbsp;
+          <span>
+            <?php echo $wo['lang']['ads']; ?>
+          </span>
+        </a>
+      </li>
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=wallet'); ?>">
+        <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+          &nbsp;
+          <span>
+            <?php echo $wo['lang']['wallet']; ?> (<?php echo Wo_GetCurrency($wo['config']['ads_currency']) ?><?php echo $wo['user']['wallet'] ?>)
+          </span>
+        </a>
+      </li>
+
+      <li class="pull-right">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=create-ads'); ?>"><i class="fa fa-plus-square-o" aria-hidden="true"></i> 
+        <?php echo $wo['lang']['create']; ?>
+        <?php echo $wo['lang']['new']; ?>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+  <div class="clear"></div>
+</nav>
+
+<nav class="navbar navbar-default ads-navbar-wrapper ads-navbar-mobile-wrapper bg-main hidden-sm hidden-md hidden-lg" role="navigation">
+  <div  id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav ads-nav w100">
+      <li class="pull-left">
+        <a href="<?php echo $wo['config']['site_url']; ?>">
+          <i class="fa fa-home" aria-hidden="true"></i>
+        </a>
+      </li>
+
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=ads'); ?>">
+          <i class="fa fa-buysellads" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li class="pull-left">
+        <a href="<?php echo Wo_SeoLink('index.php?link1=wallet'); ?>">
+          <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+        </a>
+      </li>
+
+      <li class="pull-right">
+      	<a href="<?php echo Wo_SeoLink('index.php?link1=create-ads'); ?>">
+        <i class="fa fa-plus-square-o" aria-hidden="true"></i> 
+        <?php echo $wo['lang']['create']; ?>
+        <?php echo $wo['lang']['new']; ?>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+  <div class="clear"></div>
+</nav>
