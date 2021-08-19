@@ -374,7 +374,9 @@ $(function() {
           $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
           $('.alert-danger').fadeIn(300);
       }
-      Wo_progressIconLoader($('form.setting-general-form').find('button'));
+	  else {
+			Wo_progressIconLoader($('form.setting-general-form').find('button'));
+	  }
     }
   });
 });

@@ -1,9 +1,11 @@
 <?php
 
 require_once('assets/init.php');
-use Aws\S3\S3Client;
-use Twilio\Jwt\AccessToken;
-use Twilio\Jwt\Grants\VideoGrant;
+// use Aws\S3\S3Client;
+// use Twilio\Jwt\AccessToken;
+// use Twilio\Jwt\Grants\VideoGrant;
+
+use Plivo\RestClient;
 $f = '';
 $s = '';
 if (isset($_GET['f'])) {
@@ -84,7 +86,7 @@ if ($f == 'upass') {
 if ($f == 'otpCode') {
   
     $html =$_POST['register_otp'];
-    
+   
     if (empty($html)) {
         $errors = $error_icon . $wo['lang']['please_check_details'];
     } else if($html!=$_SESSION['otp'])
@@ -541,54 +543,31 @@ if ($f == 'login') {
     exit();
 }
 if ($f == 'register') {
+    // include 'register-code.php';
     //echo '<pre>';print_r($_POST);die;
     $fields = Wo_GetWelcomeFileds();
     if (empty($_POST['phone_num']) || empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['password']) || empty($_POST['confirm_password'])) {
         $errors = $error_icon . $wo['lang']['please_check_details'];
     } elseif(empty($_POST['otp'])){
-        $_SESSION['otp'] = rand(100000,999999);
-        $otp = $_SESSION['otp'];
-        // $messages="Welcome to Mitrah.in. Your one time password is ".$otp;
-        // $m=$_POST['phone_num'];
-        // $query = http_build_query([
-        //         "username" => "rsingh",
-        //         "password" => "469585348",
-        //         "sendername" =>"Mitrah",
-        //         "mobileno" => $m,
-        //         "message" =>$messages
-        // ]);
-        // $url = "http://bulksms.mysmsmantra.com:8080/WebSMS/SMSAPI.jsp?".$query;
-        // $ch = curl_init($url);
-        // curl_setopt($ch, CURLOPT_POST, true);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $response = curl_exec($ch); // This is the result from the API
-        // //pr($result);
-        // curl_close($ch);
-
-
-        $apiKey = 'XKFzzAqxJ1tbkelP5wmLh9wimWTGL1sZT+apl7Rx9z8=';
-		$clientid = 'a9bd1047-2354-42fd-8f2a-2eb4daa59ab6';
-		$numbers = '91'.$_POST['phone_num'];
-		$message = "Welcome to Mitrah.in. Your one time password is ".$otp;
-		$senderid = 'RKSMTR';
-		$data = array(
-			"SenderId" => $senderid,
-			"ApiKey" => $apiKey,
-			"ClientId" => $clientid,
-			"Message" => $message,
-			"MobileNumbers" => $numbers
-		);
-		$json_data = json_encode($data);
-
-		$url = "https://api.mylogin.co.in/api/v2/SendSMS";
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($ch);
-		curl_close($ch);
+        $_SESSION['otp']=rand(100000,999999);
+        $otp=$_SESSION['otp'];
+    $messages="Welcome to Mitrah.in. Your one time password is ".$otp;
+    $m=$_POST['phone_num'];
+    $query = http_build_query([
+            "username" => "rsingh",
+            "password" => "469585348",
+            "sendername" =>"Mitrah",
+            "mobileno" => $m,
+            "message" =>$messages
+    ]);
+$url = "http://bulksms.mysmsmantra.com:8080/WebSMS/SMSAPI.jsp?".$query;
+$ch = curl_init($url);
+  	curl_setopt($ch, CURLOPT_POST, true);
+  	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  	$response = curl_exec($ch); // This is the result from the API
+	//pr($result);
+  	curl_close($ch);
         
         $errors = $error_icon . $otp . "Please Enter Your OTP Now ";
         
@@ -777,6 +756,7 @@ if ($f == 'register') {
     exit();
 }
 if ($f == 'recover') {
+   include 'demo.php';
     if (empty($_POST['recoveremail'])) {
         $errors = $error_icon . $wo['lang']['please_check_details'];
     } else {
@@ -804,41 +784,19 @@ if ($f == 'recover') {
           $resut=Wo_UpdatePassword($user,$new_pass);
           //echo $resut;die;
           if($resut==1){
-            // require('textlocal.class.php');
-            // $username = "mantdemo1";
-            // $hash = "d179cdbf113fbdbad44e838edcdab5a35fadbab924a672703678af84dfb0f23e";
-            // $pass="1415811203";
-            // $Textlocal = new Textlocal($username, $hash,$pass);
+            require('textlocal.class.php');
+            $username = "mantdemo1";
+            $hash = "d179cdbf113fbdbad44e838edcdab5a35fadbab924a672703678af84dfb0f23e";
+            $pass="1415811203";
+            $Textlocal = new Textlocal($username, $hash,$pass);
     
-            // $test = "0";
-            // $sender = "SMDEMO"; // This is who the message appears to be from.
-            // $numbers = "91".$_POST['recoveremail']; // A single number or a comma-seperated list of numbers
-            // $message = "Welcome to Mitrah.in. Your one time password is ".$_SESSION['otp'];// 612 chars or less
-            // $response = $Textlocal->sendMessageCustom($message,$sender,$numbers,$test);
-            // // $response=json_decode($response);
-
-            $apiKey = 'XKFzzAqxJ1tbkelP5wmLh9wimWTGL1sZT+apl7Rx9z8=';
-            $clientid = 'a9bd1047-2354-42fd-8f2a-2eb4daa59ab6';
-            $numbers = '91'.$_POST['recoveremail'];
-            $message = "Welcome to Mitrah.in. Your one time password is ".$_SESSION['otp'];
-            $senderid = 'RKSMTR';
-
-            $data = 'ApiKey='.$apiKey.'&ClientId='.$clientid.'&SenderId='.$senderid.'&Message='.$message.'&MobileNumbers='.$numbers;
-    
-            $url = "https://api.mylogin.co.in/api/v2/SendSMS?".$data;
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_HEADER, true);
-            curl_setopt($ch, CURLOPT_NOBODY, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-            curl_setopt($ch, CURLOPT_TIMEOUT,10);
-            $response = curl_exec($ch);
-            curl_close($ch);
-            
-            echo '<pre>';
-            print_r($response);
-            print_r($url);
-            echo '</pre>';
-
+            $test = "0";
+            $sender = "SMDEMO"; // This is who the message appears to be from.
+            $numbers = "91".$_POST['recoveremail']; // A single number or a comma-seperated list of numbers
+            $message = "Welcome to Mitrah.in. Your one time password is ".$_SESSION['otp'];// 612 chars or less
+            $response = $Textlocal->sendMessageCustom($message,$sender,$numbers,$test);
+         // $response=json_decode($response);
+         
             $data = array(
                 'status' => 200,
                 'message' => $response
@@ -1743,21 +1701,23 @@ if ($f == "update_images_setting") {
     exit();
 }
 if ($f == "update_proBox_setting") {
-    //pr($_POST);
     $media=array();
     $media['blank']=1;
     $proboxType=$_POST['probox_type'];
     $media['type']=$proboxType;
-    if (isset($_POST['user_id']) && Wo_CheckSession($hash_id) === true) {
+	$hash_id = $_POST['hash_id'];
+    if (isset($_POST['user_id']) && isset($hash_id)) {
         $Userdata = Wo_UserData($_POST['user_id']);
+		
         if (!empty($Userdata['user_id'])) {
             if ($proboxType==1) {
                 if(isset($_POST['probox_textarea'])){
-                    $media['blank']=0;
-                    $media['text']=$_POST['probox_textarea'];
+					$media['type'] = $proboxType;
+                    $media['blank'] = 0;
+                    $media['text'] = $_POST['probox_textarea'];
                 }
             }
-            if($proboxType==2){
+            else if($proboxType==2){
                 if (isset($_FILES['probox_image']['name'])) {
                     if ($_FILES['probox_image']['size'] > $wo['config']['maxUpload']) {
                         $invalid_file = 1;
@@ -1771,14 +1731,15 @@ if ($f == "update_proBox_setting") {
                             'type' => $_FILES["probox_image"]["type"],
                         );
                         $media    = Wo_ShareFile($fileInfo);
-                        
+						
                         if (!empty($media)) {
-                            $media['blank']=0;
+							$media['type'] = $proboxType;
+                            $media['blank'] = 0;
                         }
                     }
                 }
             }
-            if($proboxType==3){
+            else if($proboxType==3){
                 if (isset($_FILES['probox_video']['name'])) {
                     if ($_FILES['probox_video']['size'] > $wo['config']['maxUpload']) {
                         $invalid_file = 1;
@@ -1794,33 +1755,31 @@ if ($f == "update_proBox_setting") {
                         );
                         $media    = Wo_ShareFile($fileInfo);
                         if (!empty($media)) {
-                            
+                            $media['type'] = $proboxType;
                             $media['blank']=0;
-                            
                         }
                     }
-                
                 }
             }
             
             if (empty($errors)) {
-                $result=Wo_AddProboxContent($media,$_POST['user_id']);
-                if($result){
-                    $data      = array(
+				
+                $result = Wo_AddProboxContent($media,$_POST['user_id']);
+                if($result == true){
+                    $data = array(
                         'status' => 200,
                         'message' => $success_icon . $wo['lang']['setting_updated']
                     );
+					header("Content-type: application/json");
+					echo json_encode($data);
                 }
             }
+            else {
+                echo json_encode(array(
+                    'errors' => $errors
+                ));
+            }
         }
-    }
-    header("Content-type: application/json");
-    if (isset($errors)) {
-        echo json_encode(array(
-            'errors' => $errors
-        ));
-    } else {
-        echo json_encode($data);
     }
     exit();
 }
@@ -8765,7 +8724,8 @@ if ($f == 'download_updates') {
     exit();
 }
 if ($f == "insert-blog") {
-    if (Wo_CheckSession($hash_id) === true) {
+	print_r($_FILES["thumbnail"]["tmp_name"]);
+    /*if (Wo_CheckSession($hash_id) === true) {
         if (empty($_POST['blog_title']) || empty($_POST['blog_content']) || empty($_POST['blog_description'])) {
             $error = $error_icon . $wo['lang']['please_check_details'];
         } else {
@@ -8841,7 +8801,7 @@ if ($f == "insert-blog") {
     }
     header("Content-type: application/json");
     echo json_encode($data);
-    exit();
+    exit();*/
 }
 if ($f == "update-blog") {
     if (Wo_CheckSession($hash_id) === true) {
@@ -10992,9 +10952,11 @@ if ($f == 'verificate-user') {
         'message' => ($error_icon . $wo['lang']['please_check_details'])
     );
     $error = false;
+	
     if (!isset($_POST['name']) || !isset($_POST['text']) || !isset($_FILES['passport']) || !isset($_FILES['photo'])) {
-        $error = true;
-    } else {
+        $error = false;
+    }
+	else {
         if (strlen($_POST['name']) < 5 || strlen($_POST['name']) > 50) {
             $error           = true;
             $data['message'] = $error_icon . $wo['lang']['username_characters_length'];
@@ -11029,10 +10991,10 @@ if ($f == 'verificate-user') {
             ))) {
                 $error           = true;
                 $data['message'] = $error_icon . $wo['lang']['user_picture_invalid'];
-            }
-        }
+            }      
+		}
     }
-    if (!$error) {
+    if ($error) {
         $registration_data = array(
             'user_id' => $wo['user']['id'],
             'message' => Wo_Secure($_POST['text']),
@@ -11042,7 +11004,7 @@ if ($f == 'verificate-user') {
             'type' => 'User',
             'seen' => 0
         );
-        $last_id           = Wo_SendVerificationRequest($registration_data);
+        $last_id = Wo_SendVerificationRequest($registration_data);
         if ($last_id && is_numeric($last_id)) {
             $files       = array(
                 'passport' => $_FILES,
@@ -11067,7 +11029,7 @@ if ($f == 'verificate-user') {
             }
         }
     }
-    header("Content-type: application/json");
+	header("Content-type: application/json");
     echo json_encode($data);
     exit();
 }

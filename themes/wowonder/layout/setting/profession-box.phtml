@@ -8,7 +8,7 @@
          <div class="form-group">
             <label class="col-md-2" for="cover"><?php echo "Type"; ?></label>
             <div class="col-md-7">
-                  <select name="probox_type" class="form-control">
+                  <select name="probox_type" id="probox_type" class="form-control">
                      <option value="1">Text</option>
                      <option value="2">Image/Gif</option>
                      <option value="3">Video</option>
@@ -35,7 +35,7 @@
          <div class="form-group avatar-read" id="photo-form">
                <label class="col-md-2"></label>  
                <div class="col-md-7">
-                  <input type="text" class="form-control input-md" readonly>
+                  <input type="text" class="form-control input-md" name="avatar_data" readonly>
                </div>
          </div>
          <!-- Text input-->
@@ -49,16 +49,16 @@
             </div>
          </div>
          <div class="form-group cover-read" id="photo-form">
-               <label class="col-md-2"></label>  
+               <label class="col-md-2"></label>
                <div class="col-md-7">
-                  <input type="text" class="form-control input-md" readonly>
+                  <input type="text" class="form-control input-md" name="cover_data" readonly>
                </div>
          </div>
          <hr>
          <div class="form-group last-btn">
             <label class="col-md-2"></label>  
             <div class="col-sm-3">
-               <button type="submit" class="btn btn-main">
+               <button type="submit" class="btn btn-main" id="submitForm">
                <i class="fa fa-floppy-o progress-icon" data-icon="floppy-o"></i> <?php echo $wo['lang']['save']; ?>
                </button>
             </div>
@@ -72,42 +72,91 @@
 
 <script type="text/javascript">
 $(function() {
-  $("#avatar").change(function () {
+	$("#avatar").change(function () {
          var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
          $(".avatar-read input").val(filename);
          $(".avatar-read").slideDown(200);
+		 console.log(filename);
     });
-  $("#cover").change(function () {
+	$("#cover").change(function () {
          var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
          $(".cover-read input").val(filename);
          $(".cover-read").slideDown(200);
+		 console.log(filename);
     });
-  $('form.setting-profile-form').ajaxForm({
-    url: Wo_Ajax_Requests_File() + '?f=update_proBox_setting',
-    beforeSend: function() {
-      Wo_progressIconLoader($('form.setting-profile-form').find('button'));
-    },
-    success: function(data) {
-      if (data.status == 200) {
-        scrollToTop();
-        $("#probox_textarea").val("");
-        $(".cover-read, .avatar-read").slideUp(200);
-        if (data.avatar) {
-          var user_id = $('form.setting-profile-form').find('#user-id').val();
-          $('[id^=updateImage-' + user_id + ']').fadeOut(300, function () { $('[id^=updateImage-' + user_id + ']').attr("src", data.avatar)}).fadeIn(300);
-        }
-        if (data.cover) {
-          $('[id^=cover-image]').fadeOut(300, function () { $('[id^=cover-image]').attr("src", data.cover)}).fadeIn(300);
-        }
-        $('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
-        $('.alert-success').fadeIn('fast', function() {
-          $(this).delay(2500).slideUp(500, function() {
-            $(this).remove();
-          });
-        });
-      } 
-      Wo_progressIconLoader($('form.setting-profile-form').find('button'));
-    }
-  });
+	$('form.setting-profile-form').ajaxForm({
+		type: 'post',
+		enctype: 'multipart/form-data',
+		url: Wo_Ajax_Requests_File() + '?f=update_proBox_setting',
+		beforeSend: function() {
+		  Wo_progressIconLoader($('form.setting-profile-form').find('button'));
+		},
+		success: function(data) {
+			
+		  if (data.status == 200) {
+			scrollToTop();
+			console.log(data);
+			$("#probox_textarea").val();
+			$(".cover-read, .avatar-read").slideUp(200);
+			if (data.avatar) {
+			  var user_id = $('form.setting-profile-form').find('#user-id').val();
+			  $('[id^=updateImage-' + user_id + ']').fadeOut(300, function () { $('[id^=updateImage-' + user_id + ']').attr("src", data.avatar)}).fadeIn(300);
+			}
+			if (data.cover) {
+			  $('[id^=cover-image]').fadeOut(300, function () { $('[id^=cover-image]').attr("src", data.cover)}).fadeIn(300);
+			}
+			$('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+			$('.alert-success').fadeIn('fast', function() {
+			  $(this).delay(2500).slideUp(500, function() {
+				$(this).remove();
+			  });
+			});
+			location.reload();
+		  }
+		  else {
+			console.log(data);
+			Wo_progressIconLoader($('form.setting-profile-form').find('button'));
+		  }
+		}
+	});
+	/*$('#submitForm').click(function () {
+		var fileUpload = $("form.setting-profile-form").get(0);  
+        var files = fileUpload.files;
+        var fileData = new FormData();
+
+		$.ajax({
+			type: 'post',
+			enctype: 'multipart/form-data',
+			url: Wo_Ajax_Requests_File() + '?f=update_proBox_setting',
+			data: fileData,
+			beforeSend: function() {
+			  Wo_progressIconLoader($('form.setting-profile-form').find('button'));
+			},
+			success: function(data) {
+			  if (data.status == 200) {
+				scrollToTop();
+				$("#probox_textarea").val();
+				$(".cover-read, .avatar-read").slideUp(200);
+				if (data.avatar) {
+				  var user_id = $('form.setting-profile-form').find('#user-id').val();
+				  $('[id^=updateImage-' + user_id + ']').fadeOut(300, function () { $('[id^=updateImage-' + user_id + ']').attr("src", data.avatar)}).fadeIn(300);
+				}
+				if (data.cover) {
+				  $('[id^=cover-image]').fadeOut(300, function () { $('[id^=cover-image]').attr("src", data.cover)}).fadeIn(300);
+				}
+				$('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+				$('.alert-success').fadeIn('fast', function() {
+				  $(this).delay(2500).slideUp(500, function() {
+					$(this).remove();
+				  });
+				});
+			  }
+			  else {
+				console.log(data);
+				Wo_progressIconLoader($('form.setting-profile-form').find('button'));
+			  }
+			}
+		});
+	});*/
 });
 </script>

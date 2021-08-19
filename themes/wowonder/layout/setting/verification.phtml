@@ -117,7 +117,8 @@
            }
            else {
              $("#verificate-user-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
-           } 
+           }
+		   console.log(data);
            Wo_progressIconLoader($(".setting-verification-form").find('button'));
       }});
 

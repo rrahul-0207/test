@@ -243,39 +243,42 @@ function Wo_DeactivateAccount($user_id,$deactivate=0,$additional=null){
         }
 }
 function Wo_AddProboxContent($info,$user){
-    //pr($info);
     global $wo, $sqlConnect;
     $select="SELECT * FROM ".T_PROBOX." WHERE user_id=$user";
-    //pr($select);
-    $querry=mysqli_query($sqlConnect,$select);
-    $fetched_data = mysqli_fetch_assoc($querry);
-    if($fetched_data['user_id']){
-        if($fetched_data['user_id']){
-            if($info['blank']==1){
-                $update="UPDATE ".T_PROBOX." SET type='".$info['type']."' WHERE user_id=$user";
-            }
-            else{
-                if($info['type']==1)
-                    $update="UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_text='".$info['text']."' WHERE user_id=$user";
-                if($info['type']==2)
-                    $update="UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_image_path='".$info['filename']."' WHERE user_id=$user";
-                if($info['type']==3)
-                    $update="UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_video_path='".$info['filename']."' WHERE user_id=$user";
-            }
-            $querry=mysqli_query($sqlConnect,$update);
-        }
-    }
+    // pr($select);
+    $querry = mysqli_query($sqlConnect,$select);
+    // $fetched_data = mysqli_fetch_assoc($querry);
+	$count = mysqli_num_rows($querry);
+    if($count > 0){
+		if($info['blank']==1){
+			$update = "UPDATE ".T_PROBOX." SET type='".$info['type']."' WHERE user_id=$user";
+		}
+		else{
+			if($info['type']==1) {
+				$update = "UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_text='".$info['text']."' WHERE user_id=$user";
+			}     
+            else if($info['type']==2) {
+				$update = "UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_image_path='".$info['filename']."' WHERE user_id=$user";
+			}
+            else if($info['type']==3) {
+				$update = "UPDATE ".T_PROBOX." SET type='".$info['type']."', probox_video_path='".$info['filename']."' WHERE user_id=$user";	
+			}
+		}
+		$sql_query = mysqli_query($sqlConnect,$update);
+	}
     else{
-         if($info['type']==1)
-            $insert="INSERT INTO ".T_PROBOX." (user_id,probox_text,type) VALUES('".$user."','".$info['text']."','".$info['type']."')";
-        if($info['type']==2)
-            $insert="INSERT INTO ".T_PROBOX." (user_id,probox_image_path,type) VALUES('".$user."','".$info['filename']."','".$info['type']."')";
-        if($info['type']==3)
-            $insert="INSERT INTO ".T_PROBOX." (user_id,probox_video_path,type) VALUES('".$user."','".$info['filename']."','".$info['type']."')";
-        
-        $querry=mysqli_query($sqlConnect,$insert);
+        if($info['type']==1) {
+			$insert = "insert into ".T_PROBOX."(`user_id`, `probox_text`, `type`) VALUES(".$user.", '".$info['text']."', '".$info['type']."')";
+		}
+        else if($info['type']==2) {
+			$insert = "insert into ".T_PROBOX."(user_id,probox_image_path,type) VALUES('".$user."','".$info['filename']."','".$info['type']."')";
+		}
+        else if($info['type']==3) {
+			$insert = "insert into ".T_PROBOX."(user_id,probox_video_path,type) VALUES('".$user."','".$info['filename']."','".$info['type']."')";
+		}
+		$sql_query = mysqli_query($sqlConnect,$insert);
     }
-    if($querry){
+    if($sql_query){
         return true;
     }
  }

@@ -67,18 +67,21 @@ var $state = $this.find('button > .state');
 var register_button_text = "<i class='fa fa-sign-in'></i> <?php echo $wo['lang']['lets_go']?>";
 $(function() {
   $this.ajaxForm({
-    url: Wo_Ajax_Requests_File() + '?f=register',
+    type: 'POST',
+	
+    url: 'register-code.php',
     beforeSend: function() {
       working = true;
       $this.addClass('loading');
       $state.html('<?php echo $wo['lang']['please_wait'] ?>');
     },
     success: function(data) {
-      if (data.status == 200) {
+		
+      if (data == 'success') {
         $this.addClass('ok');
         $state.html('<?php echo $wo['lang']['welcome_'] ?>');
         setTimeout(function () {
-         window.location.href = data.location;
+         window.location.href = 'http://mitrah.net/start-up';
         }, 1000);
       } else if (data.status == 300) {
         window.location.href = data.location;

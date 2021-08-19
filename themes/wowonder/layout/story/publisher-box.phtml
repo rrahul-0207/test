@@ -444,6 +444,7 @@ $(function () {
   var status = $('#status');
   var publisher_button = $('#publisher-button');
   $('form.post').ajaxForm({
+	
     url: Wo_Ajax_Requests_File() + '?f=posts&s=insert_new_post',
     beforeSend: function () {
       var percentVal = '0%';
@@ -454,6 +455,7 @@ $(function () {
       Wo_progressIconLoader($('form.post').find('button'));
     },
     uploadProgress: function (event, position, total, percentComplete) {
+		
       var percentVal = percentComplete + '%';
       bar.width(percentVal);
       $('#progress').slideDown(200);
@@ -463,6 +465,7 @@ $(function () {
       percent.html(percentVal);
     },
     success: function (data) {
+	
       $('#progress').slideUp(200);
       publisher_button.attr('disabled', false);
       publisher_button.css('color', '#fff');
@@ -519,7 +522,10 @@ $(function () {
         }
       }
       Wo_progressIconLoader($('form.post').find('button'));
-    }
+	  location.reload(true);
+    },error: function (data) {
+		location.reload(true);
+	}
   });
 
   var pac_input = document.getElementById('searchTextField');

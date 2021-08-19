@@ -1,34 +1,20 @@
 <?php
 
-
-
 //$sql_db_host = "35.200.236.249";
 
-
-
 // MySQL Database User
-
-
 //$sql_db_user = "webdev";
 // MySQL Database Password
-
-
 //$sql_db_pass = "start123msx";
 
 
 // MySQL Database Name
-
 //$sql_db_name = "webdev_mitrah";
 
 
 // Site URL
 //$site_url = "https://mitrah.in"; // e.g (http://example.com)
-
-
 //$sqlConnect =  mysqli_connect($sql_db_host,$sql_db_user,$sql_db_pass,$sql_db_name);
-
-
-
 
 $sql_db_host = "localhost";
 // MySQL Database User
